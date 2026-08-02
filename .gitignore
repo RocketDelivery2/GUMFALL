@@ -1,0 +1,27 @@
+﻿# Local and private material
+design-private/
+*.private.md
+*.spoiler.md
+.env
+.env.*
+secrets.json
+
+# IDE and operating system
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+Thumbs.db
+.DS_Store
+
+# Build output
+bin/
+obj/
+Build/
+Builds/
+dist/
+out/
+coverage/
+
+# Engine-generated folders can be added after engine selection.
