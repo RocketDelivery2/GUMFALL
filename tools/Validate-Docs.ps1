@@ -273,9 +273,28 @@ if ($PsVersion.Major -lt 7 -or ($PsVersion.Major -eq 7 -and $PsVersion.Minor -lt
 
             $SchemaContent = Get-Content -Path $SchemaPath -Raw -ErrorAction Stop
 
-            # PowerShell's Test-Json does not support the JSON Schema 'examples' keyword.
-            # Strip 'examples' arrays from the schema before validation to avoid false failures.
-            $SchemaForValidation = $SchemaContent -replace '"examples"\s*:\s*\[(?:[^\[\]]|\[(?:[^\[\]]|\[[^\[\]]*\])*\])*\]\s*,?\s*', ''
+            # PowerShell's Test-Json fails on the non-standard JSON Schema 'examples' keyword.
+            # Remove all 'examples' keys from the schema before validation.
+            $SchemaObj = $SchemaContent | ConvertFrom-Json -AsHashtable -ErrorAction Stop
+            $NodeStack = New-Object System.Collections.Stack
+            $null = $NodeStack.Push($SchemaObj)
+
+            while ($NodeStack.Count -gt 0) {
+                $Node = $NodeStack.Pop()
+
+                if ($Node -is [hashtable]) {
+                    $Node.Remove('examples') | Out-Null
+                    foreach ($Value in $Node.Values) {
+                        if ($null -ne $Value) { $null = $NodeStack.Push($Value) }
+                    }
+                } elseif ($Node -is [System.Collections.IEnumerable] -and -not ($Node -is [string])) {
+                    foreach ($Value in $Node) {
+                        if ($null -ne $Value) { $null = $NodeStack.Push($Value) }
+                    }
+                }
+            }
+
+            $SchemaForValidation = $SchemaObj | ConvertTo-Json -Depth 100
 
             try {
                 $IsValid = Test-Json -Json $ExContent -Schema $SchemaForValidation -ErrorAction SilentlyContinue
