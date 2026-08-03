@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/weapon.schema.json",
-  "_status": "VERIFIED family/material/craftsmanship/level_band | PROPOSED base_force | NOT PERFORMED balance validation",
-  "_notes": "Bronze Shortsword is a vertical slice starting weapon. Base force value is a PROPOSED design target pending balance testing.",
+  "status": "VERIFIED family/material/craftsmanship/level_band | PROPOSED base_force | NOT PERFORMED balance validation",
+  "notes": "Bronze Shortsword is a vertical slice starting weapon. Base force value is a PROPOSED design target pending balance testing.",
   "id": "bronze-shortsword",
   "name": "Bronze Shortsword",
   "family": "swords",

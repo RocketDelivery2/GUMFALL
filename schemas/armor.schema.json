@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/armor.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/armor.schema.json",
   "title": "ArmorPiece",
   "description": "Technology-neutral definition of an armor piece in GUMFALL. Armor is body-region specific and tracks per-region integrity. Armor stats are not simplified to a single defense value — coverage, guard, damping, ward, mass, and articulation are all discrete fields.",
   "type": "object",

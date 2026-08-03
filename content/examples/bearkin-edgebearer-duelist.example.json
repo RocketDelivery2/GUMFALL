@@ -1,7 +1,9 @@
 {
-  "_schema": "../../schemas/ability.schema.json",
-  "_status": "VERIFIED lineage/class/specialty | DERIVED phases | PROPOSED cancel_windows",
-  "_notes": "This is a vertical-slice example for the Bearkin Edgebearer Duelist. Phase values are design targets; NOT PERFORMED timing validation.",
+  "$schema": "../../schemas/character.schema.json",
+  "id": "mirren-ashclaw",
+  "version": "1.0.0",
+  "status": "VERIFIED lineage/class/specialty | DERIVED stats | PROPOSED class_resource maximum | NOT PERFORMED timing validation",
+  "notes": "This is a vertical-slice example for the Bearkin Edgebearer Duelist. Stat values are design targets; NOT PERFORMED balance validation.",
   "name": "Mirren Ashclaw",
   "lineage": "bearkin",
   "composition": "firm-set",

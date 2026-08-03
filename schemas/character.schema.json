@@ -1,0 +1,421 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/character.schema.json",
+  "title": "Character",
+  "description": "Technology-neutral definition of a player character in GUMFALL. Characters are defined by their lineage, class, specialty, attributes, equipment, and per-region body integrity state. VERIFIED structure; individual field values may carry lower authority labels.",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "name",
+    "lineage",
+    "class",
+    "specialty",
+    "level",
+    "attributes",
+    "derived_stats",
+    "equipment_slots",
+    "class_resource",
+    "body_integrity",
+    "active_status_effects"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for this document."
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this character record. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of this character record, conforming to SemVer 2.0.0.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "type": "string",
+      "description": "Authority status label for the content of this record.",
+      "examples": [
+        "VERIFIED lineage/class/specialty | DERIVED phases | PROPOSED cancel_windows"
+      ]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    },
+    "name": {
+      "type": "string",
+      "description": "Character display name.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "lineage": {
+      "type": "string",
+      "description": "VERIFIED lineage identifier in kebab-case.",
+      "enum": [
+        "bearkin",
+        "wormkin",
+        "ringborn",
+        "gumdrop-folk",
+        "jellybean-folk",
+        "bottleborn",
+        "sourlings",
+        "licoricefolk",
+        "marshfolk",
+        "jawbreaker-kin",
+        "drakegums",
+        "swarmkin"
+      ]
+    },
+    "composition": {
+      "type": "string",
+      "description": "Physical composition of this character's body material.",
+      "examples": ["firm-set", "soft-set", "crystalline", "hollow-spun", "layered"]
+    },
+    "flavor_affinity": {
+      "type": "string",
+      "description": "Primary flavor affinity, influencing status resistances and certain ability interactions.",
+      "examples": ["cherry-ember", "sour-lime", "golden-sugar", "licorice-black", "blueberry-frost"]
+    },
+    "background": {
+      "type": "string",
+      "description": "Character background or starting origin, granting starting proficiencies or relationships.",
+      "examples": ["Sugar Guard", "Wandering Trader", "Outpost Scout"]
+    },
+    "class": {
+      "type": "string",
+      "description": "VERIFIED class identifier in kebab-case.",
+      "enum": [
+        "edgebearer",
+        "pinshot",
+        "skewer",
+        "crusher",
+        "licorice-rogue",
+        "gummy-brawler",
+        "gelomancer",
+        "flavorweaver",
+        "confectioner",
+        "candy-artificer",
+        "syrupwarden",
+        "candysinger"
+      ]
+    },
+    "specialty": {
+      "type": "string",
+      "description": "Specialty path selected at Level 3. Must be a valid specialty for the character's class. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "level": {
+      "type": "integer",
+      "description": "Current character level. Public cap is 100 per DEC-004.",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "attributes": {
+      "type": "object",
+      "description": "Six core attributes. VERIFIED attribute names.",
+      "required": ["might", "agility", "fortitude", "technique", "intellect", "spirit"],
+      "additionalProperties": false,
+      "properties": {
+        "might": {
+          "type": "integer",
+          "description": "Physical force and carrying capacity.",
+          "minimum": 1
+        },
+        "agility": {
+          "type": "integer",
+          "description": "Speed, dodge, and precision of movement.",
+          "minimum": 1
+        },
+        "fortitude": {
+          "type": "integer",
+          "description": "Physical resilience and structure recovery.",
+          "minimum": 1
+        },
+        "technique": {
+          "type": "integer",
+          "description": "Weapon mastery, crafting, and fine motor skill.",
+          "minimum": 1
+        },
+        "intellect": {
+          "type": "integer",
+          "description": "Knowledge, perception, and magical affinity.",
+          "minimum": 1
+        },
+        "spirit": {
+          "type": "integer",
+          "description": "Willpower, connection to flavor energies, and social presence.",
+          "minimum": 1
+        }
+      }
+    },
+    "derived_stats": {
+      "type": "object",
+      "description": "DERIVED values computed from attributes, lineage, equipment, and level. Not authored directly.",
+      "required": ["vitality", "structure", "stamina", "focus", "adhesion", "stability"],
+      "additionalProperties": false,
+      "properties": {
+        "vitality": {
+          "type": "number",
+          "description": "DERIVED: total health pool. Computed from Fortitude and lineage base.",
+          "minimum": 0
+        },
+        "structure": {
+          "type": "object",
+          "description": "DERIVED: per-region structural integrity pools.",
+          "required": ["head", "torso", "left_arm", "right_arm", "left_leg", "right_leg"],
+          "additionalProperties": false,
+          "properties": {
+            "head": { "type": "number", "minimum": 0 },
+            "torso": { "type": "number", "minimum": 0 },
+            "left_arm": { "type": "number", "minimum": 0 },
+            "right_arm": { "type": "number", "minimum": 0 },
+            "left_leg": { "type": "number", "minimum": 0 },
+            "right_leg": { "type": "number", "minimum": 0 }
+          }
+        },
+        "stamina": {
+          "type": "number",
+          "description": "DERIVED: action economy pool. Consumed by attacks, dodges, and special moves.",
+          "minimum": 0
+        },
+        "focus": {
+          "type": "number",
+          "description": "DERIVED: sustained-attention pool used by certain abilities and class resources.",
+          "minimum": 0
+        },
+        "adhesion": {
+          "type": "number",
+          "description": "DERIVED: resistance to being grabbed, pinned, or embedded. Based on Fortitude and composition.",
+          "minimum": 0
+        },
+        "stability": {
+          "type": "number",
+          "description": "DERIVED: resistance to knockback and stagger. Based on Fortitude and Might.",
+          "minimum": 0
+        }
+      }
+    },
+    "equipment_slots": {
+      "type": "object",
+      "description": "Equipment worn or held by this character. Slots correspond to VERIFIED body-region and weapon-position definitions.",
+      "additionalProperties": false,
+      "properties": {
+        "head": { "$ref": "#/definitions/equipment_slot_entry" },
+        "core": { "$ref": "#/definitions/equipment_slot_entry" },
+        "left_arm": { "$ref": "#/definitions/equipment_slot_entry" },
+        "right_arm": { "$ref": "#/definitions/equipment_slot_entry" },
+        "left_leg": { "$ref": "#/definitions/equipment_slot_entry" },
+        "right_leg": { "$ref": "#/definitions/equipment_slot_entry" },
+        "mantle_wrapper": { "$ref": "#/definitions/equipment_slot_entry_nullable" },
+        "internal_lining": { "$ref": "#/definitions/equipment_slot_entry_nullable" },
+        "shield": { "$ref": "#/definitions/equipment_slot_entry_nullable" },
+        "lineage_specific": { "$ref": "#/definitions/equipment_slot_entry_nullable" },
+        "main_hand": { "$ref": "#/definitions/equipment_slot_entry_nullable" },
+        "off_hand": { "$ref": "#/definitions/equipment_slot_entry_nullable" }
+      }
+    },
+    "class_resource": {
+      "type": "object",
+      "description": "Current state of the character's primary class resource.",
+      "required": ["type", "current", "maximum"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Name of the class resource.",
+          "examples": ["Edge Alignment", "Focus Marks", "Leverage", "Momentum"]
+        },
+        "current": {
+          "type": "number",
+          "description": "Current resource value.",
+          "minimum": 0
+        },
+        "maximum": {
+          "type": "number",
+          "description": "Maximum resource capacity at this level and specialty.",
+          "minimum": 0
+        },
+        "notes": {
+          "type": "string",
+          "description": "Design notes about this resource state."
+        }
+      }
+    },
+    "active_status_effects": {
+      "type": "array",
+      "description": "Status effects currently applied to this character. Empty array if none.",
+      "items": {
+        "type": "object",
+        "required": ["effect_id", "source"],
+        "additionalProperties": false,
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "description": "References a status effect definition.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "source": {
+            "type": "string",
+            "description": "What applied this status effect."
+          },
+          "stacks": {
+            "type": "integer",
+            "description": "Number of stacks, for stackable effects.",
+            "minimum": 1
+          },
+          "ticks_remaining": {
+            "type": "integer",
+            "description": "Simulation ticks until this effect expires.",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "body_integrity": {
+      "type": "object",
+      "description": "Current per-region body integrity state. This is the GelFlow simulation state, not a visual representation (DEC-002).",
+      "required": ["head", "torso", "left_arm", "right_arm", "left_leg", "right_leg"],
+      "additionalProperties": false,
+      "properties": {
+        "head": { "$ref": "#/definitions/body_region_state" },
+        "torso": { "$ref": "#/definitions/body_region_state" },
+        "left_arm": { "$ref": "#/definitions/body_region_state" },
+        "right_arm": { "$ref": "#/definitions/body_region_state" },
+        "left_leg": { "$ref": "#/definitions/body_region_state" },
+        "right_leg": { "$ref": "#/definitions/body_region_state" }
+      }
+    },
+    "provenance": {
+      "type": "string",
+      "description": "Narrative origin of this character record."
+    },
+    "vertical_slice_role": {
+      "type": "string",
+      "description": "Role this character plays in the vertical slice scenario, if applicable."
+    }
+  },
+  "definitions": {
+    "equipment_slot_entry": {
+      "type": "object",
+      "required": ["item_id", "slot", "equipped"],
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "type": "string",
+          "description": "Identifier of the item occupying this slot.",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "slot": {
+          "type": "string",
+          "description": "Slot name."
+        },
+        "equipped": {
+          "type": "boolean",
+          "description": "Whether this item is currently equipped and active."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "equipment_slot_entry_nullable": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["item_id", "slot", "equipped"],
+          "additionalProperties": false,
+          "properties": {
+            "item_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            },
+            "slot": {
+              "type": "string"
+            },
+            "equipped": {
+              "type": "boolean"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "body_region_state": {
+      "type": "object",
+      "description": "Per-region GelFlow body integrity simulation state.",
+      "required": [
+        "local_structure_current",
+        "elasticity",
+        "temperature",
+        "stickiness",
+        "crystallization",
+        "embedded_objects",
+        "deformation",
+        "connection_strength",
+        "armor_coverage"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "local_structure_current": {
+          "type": "number",
+          "description": "Current structural integrity of this region.",
+          "minimum": 0
+        },
+        "elasticity": {
+          "type": "number",
+          "description": "Elasticity coefficient [0, 1]. Higher = more resistant to permanent deformation.",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "temperature": {
+          "type": "number",
+          "description": "Thermal state of the region. 0 = ambient. Positive = heated; negative = cooled."
+        },
+        "stickiness": {
+          "type": "number",
+          "description": "Adhesion strength of the region surface. Higher = more likely to retain embedded objects.",
+          "minimum": 0
+        },
+        "crystallization": {
+          "type": "number",
+          "description": "Degree of crystallization [0, 1]. Higher = brittle, more vulnerable to crush damage.",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "embedded_objects": {
+          "type": "array",
+          "description": "Item or projectile IDs currently embedded in this region.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "deformation": {
+          "type": "number",
+          "description": "Cumulative deformation [0, 1]. Higher = more visually and functionally deformed.",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "connection_strength": {
+          "type": "number",
+          "description": "Structural integrity of the connection joint to the adjacent parent region. Torso is always 999 (anchor). When depleted, the region separates.",
+          "minimum": 0
+        },
+        "armor_coverage": {
+          "type": "number",
+          "description": "Fraction [0, 1] of the region surface covered by armor.",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  }
+}

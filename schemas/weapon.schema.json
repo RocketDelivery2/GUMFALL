@@ -1,12 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/weapon.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/weapon.schema.json",
   "title": "Weapon",
   "description": "Technology-neutral definition of a weapon item in GUMFALL. Weapons are defined by their physical form, material, craftsmanship, and provenance — not by stat floors tied to player level. Item identity is source-grounded (Core Pillar 8).",
   "type": "object",
   "required": ["id", "name", "family", "material", "craftsmanship", "level_band", "damage_types", "base_force"],
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for this document."
+    },
     "id": {
       "type": "string",
       "description": "Unique identifier for this weapon definition. Use kebab-case.",
@@ -129,6 +133,10 @@
       "type": "string",
       "description": "Current physical condition of the weapon.",
       "enum": ["pristine", "good", "worn", "damaged", "broken"]
+    },
+    "status": {
+      "type": "string",
+      "description": "Authority status label(s) for the content of this record."
     },
     "notes": {
       "type": "string",

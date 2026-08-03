@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/ability.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/ability.schema.json",
   "title": "Ability",
   "description": "Technology-neutral definition of an ability in the GUMFALL GelFlow combat system. An ability is any discrete action a character can take that is governed by the action validation and phase simulation pipeline.",
   "type": "object",

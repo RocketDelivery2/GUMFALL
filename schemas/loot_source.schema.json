@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/loot_source.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/loot_source.schema.json",
   "title": "LootSource",
   "description": "Technology-neutral definition of a loot source in GUMFALL. Every item in the game traces back to a specific source — monster drop, chest, craft, quest reward, or event. This supports Core Pillar 8 (source-grounded loot). Protected drop rate details (weights, seed values, exact probability configurations) must remain in design-private/.",
   "type": "object",

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/enchantment.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/enchantment.schema.json",
   "title": "Enchantment",
   "description": "Technology-neutral definition of an enchantment in GUMFALL. Enchantments interact with the Overmatch formula and body-region ward system. Malady-type enchantments are separately flagged and carry hard restrictions on crafting, duplication, and rerolling.",
   "type": "object",

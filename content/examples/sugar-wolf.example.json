@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/monster.schema.json",
-  "_status": "VERIFIED family/rank/intelligence | DERIVED anatomy | PROPOSED ai_profile details",
-  "_notes": "Sugar Wolf is a VERIFIED vertical slice monster. Level band 1-10. Anatomy values are PROPOSED design targets; NOT PERFORMED balance validation.",
+  "status": "VERIFIED family/rank/intelligence | DERIVED anatomy | PROPOSED ai_profile details",
+  "notes": "Sugar Wolf is a VERIFIED vertical slice monster. Level band 1-10. Anatomy values are PROPOSED design targets; NOT PERFORMED balance validation.",
   "id": "sugar-wolf",
   "name": "Sugar Wolf",
   "family": "beasts",
