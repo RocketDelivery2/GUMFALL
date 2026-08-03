@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/quest.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/quest.schema.json",
   "title": "Quest",
   "description": "Technology-neutral definition of a quest in GUMFALL. Quests support source-grounded loot (Core Pillar 8) and fair secrets (Core Pillar 9). Secret-related quests must not expose exact solutions in this schema instance — reference design-private for protected details.",
   "type": "object",

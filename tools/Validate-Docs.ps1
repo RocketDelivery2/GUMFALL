@@ -1,6 +1,6 @@
 # Validate-Docs.ps1
 # GUMFALL repository documentation validation script.
-# No external module dependencies. Requires PowerShell 7+ (pwsh).
+# No external module dependencies. Requires PowerShell 7.4+ (pwsh).
 #
 # Checks:
 #   1. All *.json files parse without error.
@@ -9,6 +9,8 @@
 #   4. No Markdown files are empty or whitespace-only.
 #   5. No files under design-private/ are tracked by git.
 #   6. No merge conflict markers are present.
+#   7. Every JSON file in content/examples validates against its declared $schema
+#      (requires PowerShell 7.4+ for Test-Json -SchemaFile).
 #
 # Exit code 0 = all checks pass.
 # Exit code 1 = one or more failures.
@@ -98,6 +100,7 @@ $RequiredDocs = @(
     "schemas/class.schema.json",
     "schemas/quest.schema.json",
     "schemas/loot_source.schema.json",
+    "schemas/character.schema.json",
     "content/examples/bearkin-edgebearer-duelist.example.json",
     "content/examples/sugar-wolf.example.json",
     "content/examples/bronze-shortsword.example.json",
@@ -221,6 +224,90 @@ foreach ($File in $AllTextFiles) {
 
 if (-not $ConflictFound) {
     Write-Pass "No merge conflict markers found."
+}
+
+Write-Host ""
+
+# ── CHECK 7: JSON Schema validation for content/examples ─────────────────────
+Write-Host "CHECK 7: JSON Schema validation for content/examples" -ForegroundColor White
+
+# Requires PowerShell 7.4+ for Test-Json -SchemaFile support.
+$PsVersion = $PSVersionTable.PSVersion
+if ($PsVersion.Major -lt 7 -or ($PsVersion.Major -eq 7 -and $PsVersion.Minor -lt 4)) {
+    Write-Warn "PowerShell 7.4+ required for JSON Schema validation (Test-Json -SchemaFile). Current: $($PsVersion.ToString()). Skipping CHECK 7."
+} else {
+    $ExamplesDir = Join-Path $RepoRoot "content/examples"
+    $ExampleFiles = Get-ChildItem -Path $ExamplesDir -Filter "*.json" -ErrorAction SilentlyContinue
+
+    if ($null -eq $ExampleFiles -or $ExampleFiles.Count -eq 0) {
+        Write-Warn "No example JSON files found in content/examples. Skipping schema validation."
+    } else {
+        foreach ($ExFile in $ExampleFiles) {
+            $ExRelPath = $ExFile.FullName.Substring($RepoRoot.Length).TrimStart('\', '/')
+            Write-Check $ExRelPath
+
+            $ExContent = Get-Content -Path $ExFile.FullName -Raw -ErrorAction Stop
+            $ExJson = $null
+            try {
+                $ExJson = $ExContent | ConvertFrom-Json -ErrorAction Stop
+            } catch {
+                Write-Fail "Cannot parse JSON for schema validation in '$ExRelPath': $($_.Exception.Message)"
+                continue
+            }
+
+            $SchemaRef = $ExJson.'$schema'
+            if ([string]::IsNullOrWhiteSpace($SchemaRef)) {
+                Write-Fail "Missing `$schema field in '$ExRelPath'. Cannot perform schema validation."
+                continue
+            }
+
+            # Resolve schema path relative to the example file's directory
+            $ExFileDir = $ExFile.DirectoryName
+            $SchemaPath = Join-Path $ExFileDir $SchemaRef
+            $SchemaPath = [System.IO.Path]::GetFullPath($SchemaPath)
+
+            if (-not (Test-Path -Path $SchemaPath -PathType Leaf)) {
+                Write-Fail "Schema file not found for '$ExRelPath': '$SchemaRef' -> '$SchemaPath'"
+                continue
+            }
+
+            $SchemaContent = Get-Content -Path $SchemaPath -Raw -ErrorAction Stop
+
+            # PowerShell's Test-Json fails on the non-standard JSON Schema 'examples' keyword.
+            # Remove all 'examples' keys from the schema before validation.
+            $SchemaObj = $SchemaContent | ConvertFrom-Json -AsHashtable -ErrorAction Stop
+            $NodeStack = New-Object System.Collections.Stack
+            $null = $NodeStack.Push($SchemaObj)
+
+            while ($NodeStack.Count -gt 0) {
+                $Node = $NodeStack.Pop()
+
+                if ($Node -is [hashtable]) {
+                    $Node.Remove('examples') | Out-Null
+                    foreach ($Value in $Node.Values) {
+                        if ($null -ne $Value) { $null = $NodeStack.Push($Value) }
+                    }
+                } elseif ($Node -is [System.Collections.IEnumerable] -and -not ($Node -is [string])) {
+                    foreach ($Value in $Node) {
+                        if ($null -ne $Value) { $null = $NodeStack.Push($Value) }
+                    }
+                }
+            }
+
+            $SchemaForValidation = $SchemaObj | ConvertTo-Json -Depth 100
+
+            try {
+                $IsValid = Test-Json -Json $ExContent -Schema $SchemaForValidation -ErrorAction SilentlyContinue
+                if ($IsValid) {
+                    Write-Pass "$ExRelPath validates against $SchemaRef"
+                } else {
+                    Write-Fail "Schema validation failed for '$ExRelPath' against '$SchemaRef'."
+                }
+            } catch {
+                Write-Fail "Schema validation error for '$ExRelPath': $($_.Exception.Message)"
+            }
+        }
+    }
 }
 
 Write-Host ""

@@ -8,7 +8,7 @@
 
 GUMFALL has 12 classes organized by their primary combat resource and identity. Each class:
 - Has a distinct named resource mechanic
-- Offers 4 specialties (selected at Level 3)
+- Offers 4 specialties (selected at Level 3); Edgebearer and Pinshot each offer 5 specialties
 - Has features at Levels 1–12 (Foundation era)
 - Gains advanced features at Level 4 (first advancement), Level 8 (second advancement), Level 10 (signature), and Level 12 (capstone)
 - Can multiclass after Level 4 under bounded multiclass rules

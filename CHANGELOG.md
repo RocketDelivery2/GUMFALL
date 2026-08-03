@@ -61,6 +61,15 @@ a releasable vertical-slice milestone is reached. See
   - `docs/systems/CRAFTING_ECONOMY_AND_LOOT.md` — Six crafting disciplines, recipe structure, enchantment crafting limits, Ward application, repair, recasting, salvage, 9-denomination currency system, 5 special currencies, economic faucets and sinks, loot generation rules, item provenance, trading, binding, Legacy Vault, Shattercrown risk pouch, inflation controls, fraud response, ethical monetization boundary.
   - `README.md` — Replaced brief README with comprehensive project overview: elevator pitch, phase statement, full feature list, all 12 design pillars, organized documentation navigation, contributing section, spoiler policy, status indicators.
   - `ROADMAP.md` — Replaced 5-phase stub with 10-phase detailed roadmap: Phase 0 (governance) through Phase 10 (live operations); each phase has objectives, deliverables checklist, success criteria, and dependencies.
+- Post-merge corrections and expansion (2026-08-03):
+  - `schemas/character.schema.json` — New JSON Schema for Character definitions; covers all six attributes, per-region body integrity state, equipment slots, class resource, and GelFlow-compatible derived stats.
+  - `docs/governance/DECISION_LOG.md` DEC-007 — ACCEPTED decision recording AGENTS.md and DESIGN_AUTHORITY.md as the authoritative repository governance bootstrap documents.
+  - `docs/audio/AUDIO_AND_MUSIC.md` — Expanded from stub to substantive specification: material-driven audio philosophy, GelFlow combat sound design, adaptive music system, biome themes, UI audio, accessibility requirements, engine-neutral technical constraints.
+  - `docs/liveops/LIVE_OPERATIONS_AND_MONETIZATION.md` — Expanded from stub to substantive specification: monetization policy (DEC-005), live-ops event cadence (weekly/monthly/seasonal/annual), shop design, anti-predatory-design commitments.
+  - `docs/ux/UI_UX_AND_ACCESSIBILITY.md` — Expanded from stub to substantive specification: HUD design, body integrity display requirements, class resource display, accessibility requirements (A-007), input remapping, colorblind support, captions, UI scale, timing accommodation.
+  - `docs/world/ROYAL_COURTS_PUBLIC_CATALOG.md` — Expanded from stub to public-safe catalog of four Royal Courts with sovereign descriptions, public lore, challenge character, and level band. No protected material.
+  - `docs/systems/LEGACY_REROLL.md` — Expanded from stub to system specification: reset/persist table, Legacy points, Legacy era progression, PvP normalization. No protected post-cap thresholds.
+  - `docs/multiplayer/WEEKLY_EVENTS.md` — Expanded from stub to system specification: three concurrent challenge tracks, sample challenges, reward structure, PvP weekly events.
 
 ### Changed
 
@@ -73,6 +82,17 @@ a releasable vertical-slice milestone is reached. See
 - `ROADMAP.md` — Replaced 5-phase stub with 10-phase detailed roadmap; fixed trailing whitespace.
 - `docs/GAME_DESIGN_BIBLE.md` — Replaced original minimal bible with comprehensive authoritative overview; fixed trailing whitespace.
 - `docs/technical/ARCHITECTURE.md` — Fixed trailing whitespace in header lines.
+- `schemas/*.schema.json` — Replaced `$id` values from `https://gumfall.dev/schemas/` with canonical repository-controlled URLs under `https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/`.
+- `schemas/monster.schema.json` — Added `status` property to allow authority label metadata in example files.
+- `schemas/weapon.schema.json` — Added `status` property to allow authority label metadata in example files.
+- `content/examples/bearkin-edgebearer-duelist.example.json` — Corrected `_schema` to `$schema`; updated schema reference to `character.schema.json`; added `id` (kebab-case) and `version` (semver) fields; normalized `_status`/`_notes` metadata to `status`/`notes`.
+- `content/examples/sugar-wolf.example.json` — Normalized `_status`/`_notes` metadata to `status`/`notes`.
+- `content/examples/bronze-shortsword.example.json` — Normalized `_status`/`_notes` metadata to `status`/`notes`.
+- `docs/governance/ASSUMPTION_REGISTER.md` — Strengthened A-006 with hard review trigger: before accepting or merging the first non-owner contributor pull request.
+- `docs/INDEX.md` — Updated governance section statuses from DRAFT to VERIFIED for DESIGN_AUTHORITY.md, DECISION_LOG.md, ASSUMPTION_REGISTER.md, and PUBLIC_PRIVATE_BOUNDARIES.md.
+- `docs/game-design/CLASSES_AND_SPECIALTIES.md` — Fixed specialty-count contradiction in Section 1 overview: Edgebearer and Pinshot each have 5 specialties; all other classes have 4. Updated from blanket "4 specialties" statement.
+- `tools/Validate-Docs.ps1` — Added Check 7: JSON Schema validation for all files in `content/examples` using `Test-Json -SchemaFile` (requires PowerShell 7.4+); added `schemas/character.schema.json` to required canonical file list; updated header comment to reflect PowerShell 7.4+ requirement.
+- `.github/workflows/docs-validation.yml` — Expanded trigger paths to cover `README.md`, `ROADMAP.md`, `CONTRIBUTING.md`, `SECURITY.md`, `LICENSE`, `.github/**`, `.editorconfig`, `.gitattributes`, `.gitignore`.
 
 ### Deprecated
 

@@ -65,10 +65,10 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 
 | Document | Status | Description |
 |---|---|---|
-| [Design Authority](governance/DESIGN_AUTHORITY.md) | DRAFT | Who owns which design decisions |
-| [Decision Log](governance/DECISION_LOG.md) | DRAFT | Accepted and open design decisions |
-| [Assumption Register](governance/ASSUMPTION_REGISTER.md) | DRAFT | Tracked assumptions with review dates |
-| [Public/Private Boundaries](governance/PUBLIC_PRIVATE_BOUNDARIES.md) | DRAFT | What may and may not be in public files |
+| [Design Authority](governance/DESIGN_AUTHORITY.md) | VERIFIED | Who owns which design decisions |
+| [Decision Log](governance/DECISION_LOG.md) | VERIFIED | Accepted and open design decisions |
+| [Assumption Register](governance/ASSUMPTION_REGISTER.md) | VERIFIED structure | Tracked assumptions with review dates |
+| [Public/Private Boundaries](governance/PUBLIC_PRIVATE_BOUNDARIES.md) | VERIFIED | What may and may not be in public files |
 
 ---
 
@@ -108,7 +108,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 | [Equipment and Economy](systems/EQUIPMENT_AND_ECONOMY.md) | DRAFT | Armor, weapons, materials, currency |
 | [Monster System](systems/MONSTER_SYSTEM.md) | DRAFT | Monster anatomy, AI, ranks, ecology |
 | [Progression](systems/PROGRESSION.md) | DRAFT | Levels, XP, eras, gates, Legacy Reroll |
-| [Legacy Reroll](systems/LEGACY_REROLL.md) | DRAFT | Post-100 Legacy Reroll system |
+| [Legacy Reroll](systems/LEGACY_REROLL.md) | PROPOSED | Post-Level-100 Legacy Reroll system; reset/persist tables, Legacy points, Legacy era |
 
 ---
 
@@ -119,7 +119,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 | [World and Royal Dungeons](world/WORLD_AND_DUNGEONS.md) | DRAFT | World overview, Royal Dungeons |
 | [World Regions](world/WORLD_REGIONS.md) | DRAFT | All PROPOSED world regions |
 | [Secret Areas and Royal Dungeons](world/SECRET_AREAS_AND_ROYAL_DUNGEONS.md) | DRAFT | Secret area framework (public-safe) |
-| [Royal Courts Public Catalog](world/ROYAL_COURTS_PUBLIC_CATALOG.md) | DRAFT | Monster royalty public-facing catalog |
+| [Royal Courts Public Catalog](world/ROYAL_COURTS_PUBLIC_CATALOG.md) | PROPOSED | Monster royalty public-facing catalog (four Royal Courts; no protected material) |
 
 ---
 
@@ -131,7 +131,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 | [PvP Foundations](multiplayer/PVP_FOUNDATIONS.md) | DRAFT | PvP normalization, ranked design |
 | [Arenas and Matchmaking](multiplayer/ARENAS_AND_MATCHMAKING.md) | DRAFT | Arena configuration, matchmaking rules |
 | [Shattercrown](multiplayer/SHATTERCROWN.md) | DRAFT | Open-PvP city design |
-| [Weekly Events](multiplayer/WEEKLY_EVENTS.md) | DRAFT | Weekly event rotation design |
+| [Weekly Events](multiplayer/WEEKLY_EVENTS.md) | PROPOSED | Weekly event rotation: three challenge tracks, rewards, PvP events |
 
 ---
 
@@ -139,7 +139,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 
 | Document | Status | Description |
 |---|---|---|
-| [UI, UX, and Accessibility](ux/UI_UX_AND_ACCESSIBILITY.md) | DRAFT | UI design, accessibility requirements |
+| [UI, UX, and Accessibility](ux/UI_UX_AND_ACCESSIBILITY.md) | PROPOSED | HUD design, body integrity display, accessibility requirements (A-007) |
 
 ---
 
@@ -147,7 +147,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 
 | Document | Status | Description |
 |---|---|---|
-| [Audio and Music](audio/AUDIO_AND_MUSIC.md) | DRAFT | Audio design and music direction |
+| [Audio and Music](audio/AUDIO_AND_MUSIC.md) | PROPOSED | Audio design philosophy, GelFlow combat audio, adaptive music system |
 
 ---
 
@@ -155,7 +155,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 
 | Document | Status | Description |
 |---|---|---|
-| [Live Operations and Monetization](liveops/LIVE_OPERATIONS_AND_MONETIZATION.md) | DRAFT | Live service design, monetization boundaries |
+| [Live Operations and Monetization](liveops/LIVE_OPERATIONS_AND_MONETIZATION.md) | PROPOSED (monetization boundaries VERIFIED) | Live service design, monetization boundaries (DEC-005) |
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/lineage.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/lineage.schema.json",
   "title": "Lineage",
   "description": "Technology-neutral definition of a player character lineage in GUMFALL. Lineages define anatomy, movement, limb layout, reattachment rules, cultural identity, and attribute tradeoffs. Body-integrity mechanics are lineage-specific — limb configurations differ across lineages.",
   "type": "object",

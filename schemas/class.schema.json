@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gumfall.dev/schemas/class.schema.json",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/class.schema.json",
   "title": "Class",
   "description": "Technology-neutral definition of a character class in GUMFALL. The class spine is VERIFIED at 12 classes. Classes have a base level range of 1-12, specialty selection from Level 3, advancement features at Levels 4 and 8, a signature technique at Level 10, and a capstone at Level 12.",
   "type": "object",

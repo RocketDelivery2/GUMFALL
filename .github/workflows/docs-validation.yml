@@ -8,6 +8,15 @@ on:
       - "content/**"
       - "AGENTS.md"
       - "CHANGELOG.md"
+      - "README.md"
+      - "ROADMAP.md"
+      - "CONTRIBUTING.md"
+      - "SECURITY.md"
+      - "LICENSE"
+      - ".github/**"
+      - ".editorconfig"
+      - ".gitattributes"
+      - ".gitignore"
   pull_request:
     paths:
       - "docs/**"
@@ -16,6 +25,15 @@ on:
       - "content/**"
       - "AGENTS.md"
       - "CHANGELOG.md"
+      - "README.md"
+      - "ROADMAP.md"
+      - "CONTRIBUTING.md"
+      - "SECURITY.md"
+      - "LICENSE"
+      - ".github/**"
+      - ".editorconfig"
+      - ".gitattributes"
+      - ".gitignore"
 
 jobs:
   validate-docs:
