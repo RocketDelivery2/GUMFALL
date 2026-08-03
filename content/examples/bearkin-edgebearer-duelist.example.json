@@ -1,0 +1,160 @@
+{
+  "_schema": "../../schemas/ability.schema.json",
+  "_status": "VERIFIED lineage/class/specialty | DERIVED phases | PROPOSED cancel_windows",
+  "_notes": "This is a vertical-slice example for the Bearkin Edgebearer Duelist. Phase values are design targets; NOT PERFORMED timing validation.",
+  "name": "Mirren Ashclaw",
+  "lineage": "bearkin",
+  "composition": "firm-set",
+  "flavor_affinity": "cherry-ember",
+  "background": "Sugar Guard",
+  "class": "edgebearer",
+  "specialty": "duelist",
+  "level": 3,
+  "attributes": {
+    "might": 14,
+    "agility": 12,
+    "fortitude": 13,
+    "technique": 11,
+    "intellect": 9,
+    "spirit": 8
+  },
+  "derived_stats": {
+    "vitality": 220,
+    "structure": {
+      "head": 60,
+      "torso": 110,
+      "left_arm": 50,
+      "right_arm": 50,
+      "left_leg": 55,
+      "right_leg": 55
+    },
+    "stamina": 85,
+    "focus": 40,
+    "adhesion": 3,
+    "stability": 7
+  },
+  "equipment_slots": {
+    "head": {
+      "item_id": "bronze-open-helm",
+      "slot": "head",
+      "equipped": true
+    },
+    "core": {
+      "item_id": "bronze-cuirass-common",
+      "slot": "core",
+      "equipped": true
+    },
+    "left_arm": {
+      "item_id": "bronze-vambrace-left",
+      "slot": "left-arm",
+      "equipped": true
+    },
+    "right_arm": {
+      "item_id": "bronze-vambrace-right",
+      "slot": "right-arm",
+      "equipped": true
+    },
+    "left_leg": {
+      "item_id": "bronze-greave-left",
+      "slot": "left-leg",
+      "equipped": true
+    },
+    "right_leg": {
+      "item_id": "bronze-greave-right",
+      "slot": "right-leg",
+      "equipped": true
+    },
+    "mantle_wrapper": null,
+    "internal_lining": null,
+    "shield": null,
+    "lineage_specific": {
+      "item_id": "bearkin-paw-knuckle-guards",
+      "slot": "lineage-specific",
+      "equipped": true,
+      "notes": "ASSUMPTION: Bearkin have lineage-specific paw/claw armor slot. Review required."
+    },
+    "main_hand": {
+      "item_id": "bronze-shortsword",
+      "slot": "main-hand",
+      "equipped": true
+    },
+    "off_hand": null
+  },
+  "class_resource": {
+    "type": "Edge Alignment",
+    "current": 0,
+    "maximum": 5,
+    "notes": "PROPOSED: Edge Alignment maximum at Level 3 Duelist is 5. Not finalized."
+  },
+  "active_status_effects": [],
+  "body_integrity": {
+    "head": {
+      "local_structure_current": 60,
+      "elasticity": 0.6,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "embedded_objects": [],
+      "deformation": 0.0,
+      "connection_strength": 100,
+      "armor_coverage": 0.75
+    },
+    "torso": {
+      "local_structure_current": 110,
+      "elasticity": 0.65,
+      "temperature": 0,
+      "stickiness": 2,
+      "crystallization": 0.0,
+      "embedded_objects": [],
+      "deformation": 0.0,
+      "connection_strength": 999,
+      "armor_coverage": 0.90
+    },
+    "left_arm": {
+      "local_structure_current": 50,
+      "elasticity": 0.7,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "embedded_objects": [],
+      "deformation": 0.0,
+      "connection_strength": 45,
+      "armor_coverage": 0.70
+    },
+    "right_arm": {
+      "local_structure_current": 50,
+      "elasticity": 0.7,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "embedded_objects": [],
+      "deformation": 0.0,
+      "connection_strength": 45,
+      "armor_coverage": 0.70
+    },
+    "left_leg": {
+      "local_structure_current": 55,
+      "elasticity": 0.65,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "embedded_objects": [],
+      "deformation": 0.0,
+      "connection_strength": 50,
+      "armor_coverage": 0.75
+    },
+    "right_leg": {
+      "local_structure_current": 55,
+      "elasticity": 0.65,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "embedded_objects": [],
+      "deformation": 0.0,
+      "connection_strength": 50,
+      "armor_coverage": 0.75
+    }
+  },
+  "provenance": "Recruited from the Sugar Guard outer posts during the preproduction vertical slice scenario.",
+  "vertical_slice_role": "Primary player character for vertical slice. Demonstrates Bearkin lineage anatomy, Edgebearer Edge Alignment resource, Duelist specialty, bronze equipment tier, and limb separation/reattachment mechanics."
+}

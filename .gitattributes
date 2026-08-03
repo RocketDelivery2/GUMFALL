@@ -1,0 +1,59 @@
+# .gitattributes — GUMFALL repository
+# Ensures consistent line endings and controls export behavior.
+
+# ── Global default: normalize to LF on checkin ───────────────────────────────
+* text=auto eol=lf
+
+# ── Markdown ──────────────────────────────────────────────────────────────────
+*.md text eol=lf
+*.mdx text eol=lf
+
+# ── JSON and schemas ──────────────────────────────────────────────────────────
+*.json text eol=lf
+*.schema.json text eol=lf
+
+# ── YAML ──────────────────────────────────────────────────────────────────────
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# ── PowerShell ────────────────────────────────────────────────────────────────
+*.ps1 text eol=lf
+*.psm1 text eol=lf
+*.psd1 text eol=lf
+
+# ── Shell and config ──────────────────────────────────────────────────────────
+*.sh text eol=lf
+*.env text eol=lf
+.editorconfig text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
+# ── Binary image formats (do not diff or normalize) ──────────────────────────
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.tiff binary
+*.ico binary
+*.webp binary
+*.svg text eol=lf
+
+# ── Binary audio/video (design reference assets) ─────────────────────────────
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.mp4 binary
+*.mov binary
+
+# ── Binary document formats ──────────────────────────────────────────────────
+*.pdf binary
+*.psd binary
+*.ai binary
+
+# ── Private design material — exclude from archives and exports ───────────────
+# design-private/ is also listed in .gitignore.
+# This export-ignore prevents the directory from appearing in git archive output
+# even if files were accidentally staged.
+design-private/** export-ignore
+design-private/**/* export-ignore

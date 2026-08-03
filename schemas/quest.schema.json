@@ -1,0 +1,241 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/quest.schema.json",
+  "title": "Quest",
+  "description": "Technology-neutral definition of a quest in GUMFALL. Quests support source-grounded loot (Core Pillar 8) and fair secrets (Core Pillar 9). Secret-related quests must not expose exact solutions in this schema instance — reference design-private for protected details.",
+  "type": "object",
+  "required": ["id", "name", "type", "giver", "objectives", "rewards", "failure_states"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable quest name.",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "type": {
+      "type": "string",
+      "description": "Quest classification.",
+      "enum": [
+        "main-story",
+        "faction",
+        "side",
+        "exploration",
+        "arena",
+        "pvp",
+        "craft",
+        "rescue",
+        "bounty",
+        "tutorial",
+        "legacy"
+      ]
+    },
+    "faction": {
+      "type": "string",
+      "description": "Faction association for this quest, if any.",
+      "examples": [
+        "Sugar Guard",
+        "Caravan Quarter",
+        "Bronze Paw",
+        "Wrapper Scholars",
+        "Arena Authority",
+        "none"
+      ]
+    },
+    "giver": {
+      "type": "object",
+      "description": "Entity that initiates this quest.",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the quest-giving entity.",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of quest giver.",
+          "enum": ["npc", "notice-board", "item", "environmental", "automatic", "player-triggered"]
+        },
+        "location": {
+          "type": "string",
+          "description": "Location or zone where the quest is picked up.",
+          "examples": ["Sugar Guard Outpost", "Bronze Paw Orchard Ring", "Caravan Quarter Market"]
+        }
+      }
+    },
+    "objectives": {
+      "type": "array",
+      "description": "Ordered list of quest objectives. Objectives may be optional or branching.",
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Objective identifier within this quest.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "description": {
+            "type": "string",
+            "description": "Player-facing description of this objective.",
+            "minLength": 5
+          },
+          "required": {
+            "type": "boolean",
+            "description": "True if this objective must be completed to finish the quest."
+          },
+          "target_type": {
+            "type": "string",
+            "description": "Type of target for this objective.",
+            "enum": [
+              "kill", "collect", "deliver", "talk", "reach-location",
+              "survive", "escort", "protect", "discover", "craft", "win-match"
+            ]
+          },
+          "target_id": {
+            "type": "string",
+            "description": "References a monster, item, location, or NPC id.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of instances required."
+          },
+          "depends_on": {
+            "type": "string",
+            "description": "Objective id that must be completed before this one unlocks.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "rewards": {
+      "type": "array",
+      "description": "Rewards granted upon quest completion.",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of reward.",
+            "enum": [
+              "xp", "currency", "item", "faction-reputation",
+              "ability-unlock", "lore", "key-item", "title"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Quantity for numeric rewards (xp, currency)."
+          },
+          "currency_type": {
+            "type": "string",
+            "description": "VERIFIED currency type for currency rewards.",
+            "enum": [
+              "tin-bit", "copper-link", "bronze-mark", "silver-shield",
+              "electrum-sun", "gold-crown", "platinum-seal", "iridium-star",
+              "aetherium-prism", "guild-laurels", "arena-crests",
+              "wrapper-sigils", "faction-scrip", "monster-cores"
+            ]
+          },
+          "item_id": {
+            "type": "string",
+            "description": "References an item id for item rewards.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "faction_id": {
+            "type": "string",
+            "description": "Faction id for reputation rewards.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "reputation_delta": {
+            "type": "integer",
+            "description": "Reputation change amount (positive or negative)."
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable reward description for complex or unique rewards."
+          }
+        }
+      },
+      "minItems": 0
+    },
+    "failure_states": {
+      "type": "array",
+      "description": "Conditions that cause this quest to fail.",
+      "items": {
+        "type": "object",
+        "required": ["condition", "consequence"],
+        "additionalProperties": false,
+        "properties": {
+          "condition": {
+            "type": "string",
+            "description": "Plain-text description of what triggers failure.",
+            "minLength": 5
+          },
+          "consequence": {
+            "type": "string",
+            "description": "What happens when the quest fails.",
+            "examples": [
+              "Quest closes, no reward.",
+              "Quest fails; faction reputation penalty applied.",
+              "Quest becomes unavailable for this character permanently."
+            ]
+          }
+        }
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "description": "Conditions that must be met before this quest becomes available.",
+      "items": {
+        "type": "object",
+        "required": ["type", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of prerequisite.",
+            "enum": [
+              "level", "quest-complete", "faction-reputation",
+              "item-in-inventory", "class", "lineage", "discovery"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Plain-text description of the prerequisite.",
+            "minLength": 5
+          },
+          "value": {
+            "description": "Threshold or id value for the prerequisite.",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" }
+            ]
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Full narrative and mechanical description of this quest.",
+      "minLength": 10
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    }
+  }
+}

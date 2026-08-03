@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/loot_source.schema.json",
+  "title": "LootSource",
+  "description": "Technology-neutral definition of a loot source in GUMFALL. Every item in the game traces back to a specific source — monster drop, chest, craft, quest reward, or event. This supports Core Pillar 8 (source-grounded loot). Protected drop rate details (weights, seed values, exact probability configurations) must remain in design-private/.",
+  "type": "object",
+  "required": ["id", "source_type", "source_id", "level_band", "drop_table"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this loot source definition. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "source_type": {
+      "type": "string",
+      "description": "VERIFIED loot source types.",
+      "enum": ["monster", "chest", "craft", "quest", "event"]
+    },
+    "source_id": {
+      "type": "string",
+      "description": "References the monster id, chest id, crafting recipe id, quest id, or event id that owns this loot source.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "level_band": {
+      "type": "object",
+      "description": "Level range in which this loot source is active.",
+      "required": ["min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "min": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "max": { "type": "integer", "minimum": 1, "maximum": 100 }
+      }
+    },
+    "drop_table": {
+      "type": "array",
+      "description": "Loot table entries for this source. NOTE: Exact weight values and seed configurations are protected design data — specific numeric weights for protected items must remain in design-private/. Public entries may use relative weight descriptors.",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "weight"],
+        "additionalProperties": false,
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "Item identifier. References a weapon, armor, consumable, or material definition.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "weight": {
+            "description": "Relative drop weight. May be an integer weight or a qualitative descriptor. Exact numeric weights for protected loot remain in design-private/.",
+            "oneOf": [
+              { "type": "integer", "minimum": 0 },
+              {
+                "type": "string",
+                "enum": ["common", "uncommon", "rare", "very-rare", "legendary", "unique", "protected"]
+              }
+            ]
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Conditions that must be true for this entry to be eligible.",
+            "items": {
+              "type": "object",
+              "required": ["type", "description"],
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Condition type.",
+                  "enum": [
+                    "player-level",
+                    "monster-rank",
+                    "body-region-destroyed",
+                    "first-kill",
+                    "quest-active",
+                    "faction-reputation",
+                    "class",
+                    "lineage",
+                    "difficulty"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Plain-text description of this condition.",
+                  "minLength": 5
+                },
+                "threshold": {
+                  "description": "Threshold value for numeric conditions.",
+                  "oneOf": [
+                    { "type": "number" },
+                    { "type": "string" }
+                  ]
+                }
+              }
+            }
+          },
+          "guaranteed": {
+            "type": "boolean",
+            "description": "True if this item always drops when conditions are met (e.g., quest key items)."
+          },
+          "max_per_instance": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of this item that can drop per encounter instance."
+          },
+          "diminishing_returns": {
+            "type": "boolean",
+            "description": "True if repeat farming of this source reduces drop probability for this item. VERIFIED: repeat farming diminishes."
+          }
+        }
+      },
+      "minItems": 0
+    },
+    "currency_drops": {
+      "type": "array",
+      "description": "Currency types that can drop from this source.",
+      "items": {
+        "type": "object",
+        "required": ["currency_type"],
+        "additionalProperties": false,
+        "properties": {
+          "currency_type": {
+            "type": "string",
+            "description": "VERIFIED currency type.",
+            "enum": [
+              "tin-bit", "copper-link", "bronze-mark", "silver-shield",
+              "electrum-sun", "gold-crown", "platinum-seal", "iridium-star",
+              "aetherium-prism", "guild-laurels", "arena-crests",
+              "wrapper-sigils", "faction-scrip", "monster-cores"
+            ]
+          },
+          "weight": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0 },
+              { "type": "string", "enum": ["common", "uncommon", "rare", "protected"] }
+            ]
+          }
+        }
+      }
+    },
+    "xp_award": {
+      "type": "object",
+      "description": "XP awarded from this source. Diminishing returns apply on repeat farming.",
+      "additionalProperties": false,
+      "properties": {
+        "base_xp": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Base XP before level-scaling and rank modifiers."
+        },
+        "rank_scaling": {
+          "type": "boolean",
+          "description": "Whether XP scales with monster rank."
+        },
+        "diminishing_returns": {
+          "type": "boolean",
+          "description": "VERIFIED: repeat farming diminishes XP. Always true for combat sources."
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or protected configuration references."
+    }
+  }
+}

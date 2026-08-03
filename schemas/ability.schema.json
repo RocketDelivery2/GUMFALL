@@ -1,0 +1,196 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/ability.schema.json",
+  "title": "Ability",
+  "description": "Technology-neutral definition of an ability in the GUMFALL GelFlow combat system. An ability is any discrete action a character can take that is governed by the action validation and phase simulation pipeline.",
+  "type": "object",
+  "required": ["id", "name", "class", "resource_cost", "phases", "damage_channels", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this ability. Use kebab-case. Example: 'edgebearer-swift-draw'.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name for this ability.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "class": {
+      "type": "string",
+      "description": "The class that owns this ability. Must match a canonical class id.",
+      "enum": [
+        "edgebearer",
+        "pinshot",
+        "skewer",
+        "crusher",
+        "licorice-rogue",
+        "gummy-brawler",
+        "gelomancer",
+        "flavorweaver",
+        "confectioner",
+        "candy-artificer",
+        "syrupwarden",
+        "candysinger"
+      ]
+    },
+    "specialty": {
+      "type": "string",
+      "description": "Optional specialty within the class that unlocks or modifies this ability.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "resource_cost": {
+      "type": "object",
+      "description": "Resource expenditure required to activate this ability.",
+      "required": ["type", "amount"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Resource pool consumed. Varies by class.",
+          "examples": ["stamina", "focus", "gel-reserve", "flavor-charge", "ingredient", "capacity", "conviction", "tempo", "bounce", "advantage", "edge-alignment", "focus-mark", "leverage", "momentum"]
+        },
+        "amount": {
+          "oneOf": [
+            { "type": "number", "minimum": 0 },
+            { "type": "string", "enum": ["all", "variable"] }
+          ],
+          "description": "Numeric cost or 'all' / 'variable' for special cases."
+        }
+      }
+    },
+    "phases": {
+      "type": "object",
+      "description": "Timing definition for the ability's four phases (design values in milliseconds). VERIFIED phase ordering: Preparation → Startup → Active → Recovery.",
+      "required": ["preparation_ms", "startup_ms", "active_ms", "recovery_ms"],
+      "additionalProperties": false,
+      "properties": {
+        "preparation_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Duration of the Preparation phase in milliseconds."
+        },
+        "startup_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Duration of the Startup phase in milliseconds."
+        },
+        "active_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Duration of the Active (hit) phase in milliseconds."
+        },
+        "recovery_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Duration of the Recovery phase in milliseconds."
+        }
+      }
+    },
+    "cancel_windows": {
+      "type": "array",
+      "description": "Phases during which cancel inputs are accepted. Each window specifies the phase and permitted cancel categories.",
+      "items": {
+        "type": "object",
+        "required": ["phase", "categories"],
+        "additionalProperties": false,
+        "properties": {
+          "phase": {
+            "type": "string",
+            "enum": ["preparation", "startup", "active", "recovery"],
+            "description": "The phase during which the cancel is available."
+          },
+          "categories": {
+            "type": "array",
+            "description": "Cancel categories allowed during this phase.",
+            "items": {
+              "type": "string",
+              "enum": ["movement", "attack", "defensive", "weapon", "ability", "emergency"]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "damage_channels": {
+      "type": "array",
+      "description": "Damage channels this ability affects. VERIFIED channels: Core Vitality, Regional Structure, Stability, Status Buildup.",
+      "items": {
+        "type": "object",
+        "required": ["channel", "type"],
+        "additionalProperties": false,
+        "properties": {
+          "channel": {
+            "type": "string",
+            "enum": ["core-vitality", "regional-structure", "stability", "status-buildup"],
+            "description": "Which damage channel this entry affects."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["slice", "pierce", "crush", "heat", "cold", "sour", "sugar", "shock", "spirit"],
+            "description": "VERIFIED damage type. Determines armor and ward interaction."
+          },
+          "base_force_multiplier": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Multiplier applied to the Attack Energy formula output for this channel."
+          }
+        }
+      },
+      "minItems": 0
+    },
+    "body_region_targets": {
+      "type": "array",
+      "description": "Body regions this ability preferentially or exclusively targets.",
+      "items": {
+        "type": "string",
+        "examples": ["head", "torso", "left-arm", "right-arm", "left-leg", "right-leg", "tail", "wings", "core"]
+      },
+      "uniqueItems": true
+    },
+    "status_effects": {
+      "type": "array",
+      "description": "Status effects this ability can apply on hit.",
+      "items": {
+        "type": "object",
+        "required": ["effect_id", "buildup_amount"],
+        "additionalProperties": false,
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "description": "Identifier of the status effect.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "buildup_amount": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Amount added to the status buildup meter per hit."
+          },
+          "condition": {
+            "type": "string",
+            "description": "Optional condition under which this effect applies.",
+            "examples": ["on-crit", "from-behind", "while-airborne", "target-crystallized"]
+          }
+        }
+      }
+    },
+    "targeting_mode": {
+      "type": "string",
+      "description": "VERIFIED targeting modes: free-aim, soft-target, hard-target, body-region-lock-point.",
+      "enum": ["free-aim", "soft-target", "hard-target", "body-region-lock-point"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Plain-text design description of what this ability does, including intended gameplay purpose.",
+      "minLength": 10
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions for this ability."
+    }
+  }
+}

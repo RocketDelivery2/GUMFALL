@@ -1,4 +1,4 @@
-﻿# Contributing
+# Contributing
 
 GUMFALL is currently in preproduction.
 

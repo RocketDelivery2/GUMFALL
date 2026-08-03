@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/weapon.schema.json",
+  "title": "Weapon",
+  "description": "Technology-neutral definition of a weapon item in GUMFALL. Weapons are defined by their physical form, material, craftsmanship, and provenance — not by stat floors tied to player level. Item identity is source-grounded (Core Pillar 8).",
+  "type": "object",
+  "required": ["id", "name", "family", "material", "craftsmanship", "level_band", "damage_types", "base_force"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this weapon definition. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "family": {
+      "type": "string",
+      "description": "VERIFIED weapon family grouping.",
+      "enum": [
+        "swords",
+        "axes",
+        "spears-polearms",
+        "hammers",
+        "daggers",
+        "bows",
+        "crossbows",
+        "shields",
+        "unarmed-implements",
+        "magical-focuses",
+        "artificer-devices"
+      ]
+    },
+    "material": {
+      "type": "string",
+      "description": "Primary material of this weapon. VERIFIED material bands apply (1-10 natural/copper/bronze, etc.).",
+      "examples": [
+        "bone", "hardwood", "copper", "bronze", "iron", "steel",
+        "tempered-steel", "chain-reinforced", "monster-composite",
+        "mithril", "silversteel", "adamantine", "orichalcum", "platinum-alloy",
+        "iridium", "composite-iridium", "aetherium", "prismatic-sugarsteel",
+        "mythic-singular", "transcendent"
+      ]
+    },
+    "craftsmanship": {
+      "type": "string",
+      "description": "VERIFIED craftsmanship tier.",
+      "enum": ["crude", "common", "tempered", "masterwork", "relic", "mythic"]
+    },
+    "level_band": {
+      "type": "object",
+      "description": "Level range within which this weapon is appropriate. Must align with VERIFIED material band table.",
+      "required": ["min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      }
+    },
+    "damage_types": {
+      "type": "array",
+      "description": "VERIFIED damage types this weapon deals.",
+      "items": {
+        "type": "string",
+        "enum": ["slice", "pierce", "crush", "heat", "cold", "sour", "sugar", "shock", "spirit"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "base_force": {
+      "type": "number",
+      "description": "Base Force value used in the Attack Energy formula: Attack Energy = Base Force × Motion × Attribute × Ability Modifier.",
+      "minimum": 0
+    },
+    "reach": {
+      "type": "string",
+      "description": "Qualitative reach classification for gameplay purposes.",
+      "enum": ["close", "short", "medium", "long", "reach", "thrown", "ranged"]
+    },
+    "grip": {
+      "type": "string",
+      "description": "Required grip configuration.",
+      "enum": ["one-hand", "one-hand-versatile", "two-hand", "off-hand", "dual-wield-native"]
+    },
+    "enchantments": {
+      "type": "array",
+      "description": "Enchantments present on this weapon instance. Natural weapons can have 0-3 enchantments; Malady is separate.",
+      "items": {
+        "type": "object",
+        "required": ["enchantment_id"],
+        "additionalProperties": false,
+        "properties": {
+          "enchantment_id": {
+            "type": "string",
+            "description": "References an enchantment defined in enchantment.schema.json.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "rank": {
+            "type": "string",
+            "description": "Enchantment rank tier.",
+            "enum": ["standard", "veteran", "elite", "champion", "boss", "mythic"]
+          }
+        }
+      },
+      "maxItems": 4
+    },
+    "provenance": {
+      "type": "string",
+      "description": "Origin story of this weapon — monster drop, faction craft, region find, quest reward, etc. Supports Core Pillar 8 (source-grounded loot).",
+      "examples": [
+        "Dropped by Bronze Paw militia sergeant",
+        "Crafted by Sugarforge smiths of the Caravan Quarter",
+        "Quest reward from the Sugar Guard initiation rite"
+      ]
+    },
+    "condition": {
+      "type": "string",
+      "description": "Current physical condition of the weapon.",
+      "enum": ["pristine", "good", "worn", "damaged", "broken"]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    }
+  }
+}

@@ -1,4 +1,4 @@
-﻿# Competitive Progression
+# Competitive Progression
 
 ## Public Progression
 

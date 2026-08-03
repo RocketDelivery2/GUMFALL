@@ -1,4 +1,4 @@
-﻿# Monster System
+# Monster System
 
 Each monster is composed from:
 

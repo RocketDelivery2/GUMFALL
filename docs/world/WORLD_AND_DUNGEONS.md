@@ -1,4 +1,4 @@
-﻿# World, Secrets, and Royal Dungeons
+# World, Secrets, and Royal Dungeons
 
 The Sweetlands contain:
 

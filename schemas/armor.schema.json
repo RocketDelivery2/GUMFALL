@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/armor.schema.json",
+  "title": "ArmorPiece",
+  "description": "Technology-neutral definition of an armor piece in GUMFALL. Armor is body-region specific and tracks per-region integrity. Armor stats are not simplified to a single defense value — coverage, guard, damping, ward, mass, and articulation are all discrete fields.",
+  "type": "object",
+  "required": [
+    "id", "name", "slot", "category", "material", "craftsmanship",
+    "level_band", "coverage", "cut_guard", "pierce_guard",
+    "crush_damping", "stability", "mass", "articulation"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "slot": {
+      "type": "string",
+      "description": "VERIFIED armor slots. Lineage-specific slots vary by lineage anatomy.",
+      "enum": [
+        "head",
+        "core",
+        "left-arm",
+        "right-arm",
+        "left-leg",
+        "right-leg",
+        "mantle-wrapper",
+        "internal-lining",
+        "shield",
+        "lineage-specific"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "description": "VERIFIED armor category. Determines mobility and protection tradeoffs.",
+      "enum": ["flexible", "light", "medium", "heavy", "shell"]
+    },
+    "material": {
+      "type": "string",
+      "description": "Primary material. Must be consistent with level_band and VERIFIED material band table.",
+      "examples": [
+        "tanned-hide", "hardened-candy-shell", "copper-plate", "bronze-chain",
+        "bronze-plate", "iron-mail", "steel-plate", "tempered-steel",
+        "mithril-weave", "adamantine-plate", "aetherium-lattice"
+      ]
+    },
+    "craftsmanship": {
+      "type": "string",
+      "description": "VERIFIED craftsmanship tier.",
+      "enum": ["crude", "common", "tempered", "masterwork", "relic", "mythic"]
+    },
+    "level_band": {
+      "type": "object",
+      "description": "Appropriate level range for this armor piece.",
+      "required": ["min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "min": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "max": { "type": "integer", "minimum": 1, "maximum": 100 }
+      }
+    },
+    "coverage": {
+      "type": "number",
+      "description": "Percentage of the body region that this piece covers (0.0–1.0). Determines how often incoming attacks interact with armor vs. bare structure.",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "cut_guard": {
+      "type": "number",
+      "description": "Reduction to Slice damage type applied when coverage is hit.",
+      "minimum": 0
+    },
+    "pierce_guard": {
+      "type": "number",
+      "description": "Reduction to Pierce damage type applied when coverage is hit.",
+      "minimum": 0
+    },
+    "crush_damping": {
+      "type": "number",
+      "description": "Reduction to Crush damage type applied when coverage is hit.",
+      "minimum": 0
+    },
+    "elemental_ward": {
+      "type": "object",
+      "description": "Elemental ward values per damage type. Each key is a damage type; value is the ward strength.",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0
+      },
+      "propertyNames": {
+        "enum": ["heat", "cold", "sour", "sugar", "shock", "spirit"]
+      }
+    },
+    "stability": {
+      "type": "number",
+      "description": "Contribution to the Stability derived stat while this piece is worn. Affects knockback and stagger resistance.",
+      "minimum": 0
+    },
+    "mass": {
+      "type": "number",
+      "description": "Physical mass in abstract units. Contributes to total encumbrance.",
+      "minimum": 0
+    },
+    "articulation": {
+      "type": "number",
+      "description": "Mobility allowance (0.0–1.0). Higher articulation means less movement penalty for the equipped slot.",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "wards": {
+      "type": "array",
+      "description": "Active ward effects attached to this armor piece.",
+      "items": {
+        "type": "object",
+        "required": ["ward_id", "ward_strength"],
+        "additionalProperties": false,
+        "properties": {
+          "ward_id": {
+            "type": "string",
+            "description": "Identifier of the ward definition.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "ward_strength": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Ward Strength used in the Overmatch formula: Overmatch = Enchantment Pressure − Ward Strength."
+          }
+        }
+      }
+    },
+    "condition": {
+      "type": "string",
+      "description": "Current physical condition of the armor piece.",
+      "enum": ["pristine", "good", "worn", "damaged", "broken"]
+    },
+    "provenance": {
+      "type": "string",
+      "description": "Origin story supporting Core Pillar 8 (source-grounded loot).",
+      "examples": [
+        "Issued to Sugar Guard recruits",
+        "Looted from Bronze Paw lieutenant",
+        "Crafted by Caravan smiths of the Wrapper Quarter"
+      ]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    }
+  }
+}
