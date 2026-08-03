@@ -1,0 +1,229 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/lineage.schema.json",
+  "title": "Lineage",
+  "description": "Technology-neutral definition of a player character lineage in GUMFALL. Lineages define anatomy, movement, limb layout, reattachment rules, cultural identity, and attribute tradeoffs. Body-integrity mechanics are lineage-specific — limb configurations differ across lineages.",
+  "type": "object",
+  "required": [
+    "id", "name", "anatomy", "movement_type", "limb_layout",
+    "reattachment_rules", "cultural_identity",
+    "primary_attribute_bonus", "tradeoffs", "equipment_accommodations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier. Must match one of the VERIFIED canonical lineage names in kebab-case.",
+      "enum": [
+        "bearkin",
+        "wormkin",
+        "ringborn",
+        "gumdrop-folk",
+        "jellybean-folk",
+        "bottleborn",
+        "sourlings",
+        "licoricefolk",
+        "marshfolk",
+        "jawbreaker-kin",
+        "drakegums",
+        "swarmkin"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name matching VERIFIED canonical lineage name.",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "anatomy": {
+      "type": "string",
+      "description": "High-level anatomical classification describing the lineage's body plan.",
+      "examples": [
+        "bipedal-ursine",
+        "elongated-segmented",
+        "ring-stacked-bipedal",
+        "compact-bipedal",
+        "bean-shaped-bipedal",
+        "vessel-bodied-bipedal",
+        "crystalline-bipedal",
+        "cord-limbed-bipedal",
+        "marsh-adapted-amphibious",
+        "spherical-resilient-bipedal",
+        "draconic-quadruped",
+        "colony-swarm"
+      ]
+    },
+    "movement_type": {
+      "type": "string",
+      "description": "Primary movement modality for this lineage.",
+      "enum": [
+        "bipedal-run",
+        "bipedal-lumber",
+        "slither-roll",
+        "bounce-roll",
+        "float-drift",
+        "quadruped-gallop",
+        "swarm-scatter",
+        "amphibious-lope"
+      ]
+    },
+    "limb_layout": {
+      "type": "object",
+      "description": "Describes the limb and appendage configuration for this lineage. Drives body-region targeting availability.",
+      "required": ["arms", "legs"],
+      "additionalProperties": true,
+      "properties": {
+        "arms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of arm-equivalent limbs."
+        },
+        "legs": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of leg-equivalent limbs."
+        },
+        "tail": {
+          "type": "boolean",
+          "description": "Whether this lineage has a tail as a distinct body region."
+        },
+        "wings": {
+          "type": "boolean",
+          "description": "Whether this lineage has wings as distinct body regions."
+        },
+        "segments": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of distinct body segments (for segmented lineages like Wormkin or Ringborn)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional anatomy notes for this lineage's limb layout."
+        }
+      }
+    },
+    "reattachment_rules": {
+      "type": "object",
+      "description": "Rules governing limb/segment detachment and reattachment. Body integrity system must honor these per Core Pillar 4 (physical consequences).",
+      "required": ["can_reattach", "reattach_method"],
+      "additionalProperties": false,
+      "properties": {
+        "can_reattach": {
+          "type": "boolean",
+          "description": "Whether detached limbs can be reattached during gameplay."
+        },
+        "reattach_method": {
+          "type": "string",
+          "description": "How reattachment is performed.",
+          "examples": [
+            "self-reattach-proximity",
+            "ally-reattach",
+            "item-adhesive",
+            "gelomancer-ability",
+            "base-rest-only",
+            "not-applicable"
+          ]
+        },
+        "reattach_time_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Time in milliseconds required to complete reattachment (design value, NOT PERFORMED validation)."
+        },
+        "segment_independence": {
+          "type": "boolean",
+          "description": "Whether detached segments can act independently (e.g., Wormkin segments)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Special reattachment rules or exceptions."
+        }
+      }
+    },
+    "cultural_identity": {
+      "type": "object",
+      "description": "Cultural and narrative identity of this lineage in the world of GUMFALL.",
+      "required": ["summary"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": {
+          "type": "string",
+          "description": "One to three sentence narrative summary of this lineage's place in the world.",
+          "minLength": 10
+        },
+        "typical_factions": {
+          "type": "array",
+          "description": "Factions this lineage is commonly associated with.",
+          "items": { "type": "string" }
+        },
+        "cultural_notes": {
+          "type": "string",
+          "description": "Additional cultural context."
+        }
+      }
+    },
+    "primary_attribute_bonus": {
+      "type": "object",
+      "description": "Attribute bonuses granted by lineage at character creation. Keys are VERIFIED primary attribute names.",
+      "additionalProperties": false,
+      "properties": {
+        "might":      { "type": "integer", "minimum": -3, "maximum": 6 },
+        "agility":    { "type": "integer", "minimum": -3, "maximum": 6 },
+        "fortitude":  { "type": "integer", "minimum": -3, "maximum": 6 },
+        "technique":  { "type": "integer", "minimum": -3, "maximum": 6 },
+        "intellect":  { "type": "integer", "minimum": -3, "maximum": 6 },
+        "spirit":     { "type": "integer", "minimum": -3, "maximum": 6 }
+      }
+    },
+    "tradeoffs": {
+      "type": "array",
+      "description": "List of lineage-specific tradeoffs — things this lineage does worse or is vulnerable to.",
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "additionalProperties": false,
+        "properties": {
+          "stat": {
+            "type": "string",
+            "description": "Optional: the stat or system affected.",
+            "examples": ["agility", "stability", "heat-resistance", "cold-resistance"]
+          },
+          "description": {
+            "type": "string",
+            "description": "Plain-text description of the tradeoff.",
+            "minLength": 5
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "equipment_accommodations": {
+      "type": "array",
+      "description": "Special equipment rules or modifications required by this lineage's anatomy. Drives armor slot availability.",
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "additionalProperties": false,
+        "properties": {
+          "slot": {
+            "type": "string",
+            "description": "Optional: which slot is affected.",
+            "examples": ["head", "left-arm", "lineage-specific", "mantle-wrapper"]
+          },
+          "description": {
+            "type": "string",
+            "description": "Plain-text description of the accommodation rule.",
+            "minLength": 5
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Full narrative and mechanical description of this lineage."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    }
+  }
+}

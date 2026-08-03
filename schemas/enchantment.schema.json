@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/enchantment.schema.json",
+  "title": "Enchantment",
+  "description": "Technology-neutral definition of an enchantment in GUMFALL. Enchantments interact with the Overmatch formula and body-region ward system. Malady-type enchantments are separately flagged and carry hard restrictions on crafting, duplication, and rerolling.",
+  "type": "object",
+  "required": ["id", "name", "category", "pressure_value", "eligible_weapon_families", "malady", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this enchantment. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "category": {
+      "type": "string",
+      "description": "Functional category of this enchantment. Malady subtypes (Omnislayer, Ruin, Affliction, Finality) are represented via the malady flag and malady_subtype field.",
+      "enum": [
+        "damage-bonus",
+        "status-buildup",
+        "ward-bypass",
+        "elemental",
+        "crowd-control",
+        "utility",
+        "malady"
+      ]
+    },
+    "malady_subtype": {
+      "type": "string",
+      "description": "VERIFIED Malady subtypes. Only present when malady is true. Cannot be crafted, duplicated, rerolled, or receive a fifth enchantment.",
+      "enum": ["omnislayer", "ruin", "affliction", "finality"]
+    },
+    "pressure_value": {
+      "type": "number",
+      "description": "Enchantment Pressure used in the Overmatch formula: Overmatch = Enchantment Pressure − Ward Strength. Higher pressure means the enchantment overcomes wards more easily.",
+      "minimum": 0
+    },
+    "rank_multiplier": {
+      "type": "string",
+      "description": "VERIFIED rank multiplier reference. Standard ×1, Veteran ×1.5, Elite ×3, Champion ×6, Boss ×12, Mythic ×25. Minions do not roll enchantments.",
+      "enum": ["standard", "veteran", "elite", "champion", "boss", "mythic"]
+    },
+    "eligible_weapon_families": {
+      "type": "array",
+      "description": "Weapon families this enchantment can appear on. Empty array means unrestricted (all families eligible).",
+      "items": {
+        "type": "string",
+        "enum": [
+          "swords",
+          "axes",
+          "spears-polearms",
+          "hammers",
+          "daggers",
+          "bows",
+          "crossbows",
+          "shields",
+          "unarmed-implements",
+          "magical-focuses",
+          "artificer-devices"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "malady": {
+      "type": "boolean",
+      "description": "VERIFIED: true if this enchantment is a Malady type. Maladies cannot be crafted, duplicated, rerolled, or coexist with a fifth enchantment on an item."
+    },
+    "buildup_reduction_interaction": {
+      "type": "object",
+      "description": "VERIFIED: How this enchantment's buildup interacts with the Overmatch formula buildup reduction bands.",
+      "additionalProperties": false,
+      "properties": {
+        "overmatch_minus_15_or_lower": {
+          "type": "number",
+          "const": 0.80,
+          "description": "80% buildup reduction when Overmatch is −15 or lower."
+        },
+        "overmatch_minus_14_to_minus_6": {
+          "type": "number",
+          "const": 0.65,
+          "description": "65% buildup reduction for Overmatch −14 to −6."
+        },
+        "overmatch_minus_5_to_plus_5": {
+          "type": "number",
+          "const": 0.45,
+          "description": "45% buildup reduction for Overmatch −5 to +5."
+        },
+        "overmatch_plus_6_to_plus_12": {
+          "type": "number",
+          "const": 0.25,
+          "description": "25% buildup reduction for Overmatch +6 to +12."
+        },
+        "overmatch_plus_13_to_plus_20": {
+          "type": "number",
+          "const": 0.10,
+          "description": "10% buildup reduction for Overmatch +13 to +20."
+        },
+        "overmatch_above_plus_20_note": {
+          "type": "string",
+          "const": "Not prevented; duration reduced 10%.",
+          "description": "Above +20 Overmatch the effect is not prevented but duration is reduced by 10%."
+        }
+      }
+    },
+    "effect_description": {
+      "type": "string",
+      "description": "Mechanical description of what this enchantment does when active.",
+      "minLength": 5
+    },
+    "description": {
+      "type": "string",
+      "description": "Plain-text lore and design description of this enchantment.",
+      "minLength": 5
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    }
+  },
+  "if": { "properties": { "malady": { "const": true } } },
+  "then": {
+    "required": ["malady_subtype"],
+    "properties": {
+      "eligible_weapon_families": {
+        "description": "Malady enchantments are not craftable onto weapons — this field records families on which they can naturally appear."
+      }
+    }
+  }
+}

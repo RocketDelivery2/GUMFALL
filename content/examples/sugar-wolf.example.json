@@ -1,0 +1,130 @@
+{
+  "$schema": "../../schemas/monster.schema.json",
+  "_status": "VERIFIED family/rank/intelligence | DERIVED anatomy | PROPOSED ai_profile details",
+  "_notes": "Sugar Wolf is a VERIFIED vertical slice monster. Level band 1-10. Anatomy values are PROPOSED design targets; NOT PERFORMED balance validation.",
+  "id": "sugar-wolf",
+  "name": "Sugar Wolf",
+  "family": "beasts",
+  "composition": "soft-set",
+  "flavor": "golden-sugar",
+  "roles": ["predator"],
+  "rank": "standard",
+  "intelligence": "instinctive",
+  "temperament": "pack-hunter",
+  "level_band": {
+    "min": 1,
+    "max": 10
+  },
+  "anatomy_regions": [
+    {
+      "region_id": "head",
+      "local_structure": 40,
+      "elasticity": 0.55,
+      "temperature": 0,
+      "stickiness": 2,
+      "crystallization": 0.0,
+      "connection_strength": 55,
+      "armor_coverage": 0.10,
+      "vulnerable_to": ["pierce", "crush"],
+      "resistant_to": []
+    },
+    {
+      "region_id": "jaw",
+      "local_structure": 25,
+      "elasticity": 0.5,
+      "temperature": 0,
+      "stickiness": 3,
+      "crystallization": 0.0,
+      "connection_strength": 40,
+      "armor_coverage": 0.05,
+      "vulnerable_to": ["crush"],
+      "resistant_to": [],
+      "notes": "PROPOSED: Destroying the jaw removes bite attacks. Requires gameplay validation."
+    },
+    {
+      "region_id": "torso",
+      "local_structure": 90,
+      "elasticity": 0.65,
+      "temperature": 0,
+      "stickiness": 2,
+      "crystallization": 0.0,
+      "connection_strength": 999,
+      "armor_coverage": 0.05,
+      "vulnerable_to": [],
+      "resistant_to": ["cold"]
+    },
+    {
+      "region_id": "left-foreleg",
+      "local_structure": 35,
+      "elasticity": 0.70,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "connection_strength": 38,
+      "armor_coverage": 0.0,
+      "vulnerable_to": ["slice"],
+      "resistant_to": []
+    },
+    {
+      "region_id": "right-foreleg",
+      "local_structure": 35,
+      "elasticity": 0.70,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "connection_strength": 38,
+      "armor_coverage": 0.0,
+      "vulnerable_to": ["slice"],
+      "resistant_to": []
+    },
+    {
+      "region_id": "left-hindleg",
+      "local_structure": 38,
+      "elasticity": 0.70,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "connection_strength": 40,
+      "armor_coverage": 0.0,
+      "vulnerable_to": ["slice"],
+      "resistant_to": []
+    },
+    {
+      "region_id": "right-hindleg",
+      "local_structure": 38,
+      "elasticity": 0.70,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "connection_strength": 40,
+      "armor_coverage": 0.0,
+      "vulnerable_to": ["slice"],
+      "resistant_to": []
+    },
+    {
+      "region_id": "tail",
+      "local_structure": 20,
+      "elasticity": 0.80,
+      "temperature": 0,
+      "stickiness": 1,
+      "crystallization": 0.0,
+      "connection_strength": 25,
+      "armor_coverage": 0.0,
+      "vulnerable_to": ["slice"],
+      "resistant_to": [],
+      "notes": "PROPOSED: Tail acts as a balance region. Severing it reduces evasion. Requires gameplay validation."
+    }
+  ],
+  "loot_sources": [
+    "sugar-wolf-standard-drop",
+    "sugar-wolf-body-harvest"
+  ],
+  "ai_profile": {
+    "behavior_archetype": "pack-pursuer",
+    "priority_targets": ["nearest", "isolated"],
+    "escape_threshold": 0.15,
+    "notes": "PROPOSED: Sugar Wolves howl to call pack members when above escape threshold and below 40% vitality. Pack call triggers once per encounter. Requires AI validation."
+  },
+  "description": "A medium-sized predatory beast composed of golden sugar-set gummy material. Sugar Wolves hunt in small packs of 2-4, using coordinated flanking to isolate targets. Their bodies are soft-set and vulnerable to slicing attacks on the limbs. Veteran Wolves show distinctive amber crystallization around the muzzle. Core vertical slice monster used to demonstrate pack AI, limb targeting, and source-grounded loot (wolf-material drops).",
+  "notes": "VERIFIED: Included in vertical slice target. Family Beasts, Rank Standard, Intelligence Instinctive per canonical design. Exact loot weights are in design-private/."
+}

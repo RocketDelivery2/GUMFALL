@@ -1,4 +1,4 @@
-﻿# PvP, Arenas, and Events
+# PvP, Arenas, and Events
 
 ## PvP Rulesets
 

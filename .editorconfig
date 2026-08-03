@@ -1,0 +1,56 @@
+# EditorConfig — https://editorconfig.org
+# GUMFALL repository encoding and formatting conventions.
+
+root = true
+
+# ── Defaults for all files ────────────────────────────────────────────────────
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# ── Markdown ──────────────────────────────────────────────────────────────────
+[*.md]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+max_line_length = off
+
+# ── JSON (including schemas and examples) ─────────────────────────────────────
+[*.json]
+indent_style = space
+indent_size = 2
+
+[*.schema.json]
+indent_style = space
+indent_size = 2
+
+# ── YAML (workflows, configs) ─────────────────────────────────────────────────
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[*.yaml]
+indent_style = space
+indent_size = 2
+
+# ── PowerShell ────────────────────────────────────────────────────────────────
+[*.ps1]
+indent_style = space
+indent_size = 4
+
+[*.psm1]
+indent_style = space
+indent_size = 4
+
+[*.psd1]
+indent_style = space
+indent_size = 4
+
+# ── EditorConfig itself ───────────────────────────────────────────────────────
+[.editorconfig]
+indent_style = space
+indent_size = 2

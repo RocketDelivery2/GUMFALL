@@ -1,4 +1,4 @@
-﻿# Combat System
+# Combat System
 
 ## GelFlow
 

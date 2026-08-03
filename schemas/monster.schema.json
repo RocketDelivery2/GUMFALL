@@ -1,0 +1,237 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/monster.schema.json",
+  "title": "Monster",
+  "description": "Technology-neutral definition of a monster in GUMFALL. Monsters follow anatomy-driven design (Core Pillar 7) and share damage, body-integrity, and loot rules with players. Loot is source-grounded (Core Pillar 8).",
+  "type": "object",
+  "required": [
+    "id", "name", "family", "composition", "flavor",
+    "roles", "rank", "intelligence", "level_band",
+    "anatomy_regions", "loot_sources", "ai_profile"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this monster definition. Use kebab-case.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "family": {
+      "type": "string",
+      "description": "VERIFIED monster family.",
+      "enum": [
+        "gummyfolk",
+        "beasts",
+        "undead",
+        "constructs",
+        "oozes-wild-gels",
+        "plants",
+        "sugarbugs",
+        "dragons",
+        "giants-colossi",
+        "spirits",
+        "wrapperborn",
+        "humans"
+      ]
+    },
+    "composition": {
+      "type": "string",
+      "description": "Physical composition type, aligned with VERIFIED composition list.",
+      "enum": [
+        "soft-set",
+        "firm-set",
+        "crystal-set",
+        "syrup-core",
+        "layered",
+        "aerated",
+        "unknown"
+      ]
+    },
+    "flavor": {
+      "type": "string",
+      "description": "Flavor affinity, aligned with VERIFIED flavor affinities.",
+      "enum": [
+        "cherry-ember",
+        "blue-frost",
+        "lime-sour",
+        "golden-sugar",
+        "cola-fizz",
+        "grape-shade",
+        "peach-bloom",
+        "lemon-spark",
+        "clear-neutral",
+        "mixed",
+        "unknown"
+      ]
+    },
+    "roles": {
+      "type": "array",
+      "description": "VERIFIED combat roles this monster fulfills.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bruiser", "defender", "skirmisher", "artillery",
+          "controller", "support", "ambusher", "swarm",
+          "siege", "predator"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "rank": {
+      "type": "string",
+      "description": "VERIFIED monster rank. Rank affects enchantment roll multipliers and XP.",
+      "enum": ["minion", "standard", "veteran", "elite", "champion", "boss", "mythic"]
+    },
+    "intelligence": {
+      "type": "string",
+      "description": "VERIFIED intelligence tier. Determines AI behavioral capability.",
+      "enum": ["instinctive", "trained", "tactical", "strategic"]
+    },
+    "temperament": {
+      "type": "string",
+      "description": "Default behavioral stance when not in combat.",
+      "enum": [
+        "passive", "territorial", "aggressive", "pack-hunter",
+        "ambush", "flee-then-return", "patrol", "guard"
+      ]
+    },
+    "level_band": {
+      "type": "object",
+      "description": "Level range this monster appears in. Must align with VERIFIED level band descriptions.",
+      "required": ["min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "min": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "max": { "type": "integer", "minimum": 1, "maximum": 100 }
+      }
+    },
+    "anatomy_regions": {
+      "type": "array",
+      "description": "Per-region body integrity data for this monster. Each region can be targeted independently and carries its own structural values. Supports Core Pillar 7 (anatomy-driven encounters).",
+      "items": {
+        "type": "object",
+        "required": ["region_id", "local_structure", "elasticity"],
+        "additionalProperties": false,
+        "properties": {
+          "region_id": {
+            "type": "string",
+            "description": "Identifier for the body region.",
+            "examples": ["head", "torso", "left-foreleg", "right-foreleg", "left-hindleg", "right-hindleg", "tail", "jaw", "back"]
+          },
+          "local_structure": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Maximum structural integrity for this region."
+          },
+          "elasticity": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Resistance to deformation (0.0 = no resistance, 1.0 = fully rigid)."
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Base temperature value. Affects heat/cold interactions."
+          },
+          "stickiness": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Stickiness factor. Affects embedded object interactions and adhesion."
+          },
+          "crystallization": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Starting crystallization level. Higher = more brittle."
+          },
+          "connection_strength": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Force required to separate this region from adjacent regions (e.g., limb detachment threshold)."
+          },
+          "armor_coverage": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Natural armor coverage fraction for this region."
+          },
+          "vulnerable_to": {
+            "type": "array",
+            "description": "Damage types that deal bonus effect to this region.",
+            "items": {
+              "type": "string",
+              "enum": ["slice", "pierce", "crush", "heat", "cold", "sour", "sugar", "shock", "spirit"]
+            },
+            "uniqueItems": true
+          },
+          "resistant_to": {
+            "type": "array",
+            "description": "Damage types that deal reduced effect to this region.",
+            "items": {
+              "type": "string",
+              "enum": ["slice", "pierce", "crush", "heat", "cold", "sour", "sugar", "shock", "spirit"]
+            },
+            "uniqueItems": true
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "loot_sources": {
+      "type": "array",
+      "description": "References to LootSource definitions associated with this monster. Supports Core Pillar 8 (source-grounded loot).",
+      "items": {
+        "type": "string",
+        "description": "LootSource id referencing a loot_source.schema.json document.",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "ai_profile": {
+      "type": "object",
+      "description": "High-level AI behavioral profile. Technology-neutral — describes design intent, not implementation.",
+      "required": ["behavior_archetype"],
+      "additionalProperties": false,
+      "properties": {
+        "behavior_archetype": {
+          "type": "string",
+          "description": "Top-level behavioral pattern this monster follows.",
+          "examples": ["pack-pursuer", "ambush-pounce", "area-denial", "support-healer", "siege-anchor"]
+        },
+        "priority_targets": {
+          "type": "array",
+          "description": "Preferred target selection priorities.",
+          "items": {
+            "type": "string",
+            "examples": ["nearest", "lowest-vitality", "isolated", "caster", "downed-ally"]
+          }
+        },
+        "escape_threshold": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Fraction of core vitality remaining at which this monster attempts to flee or call reinforcements."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Design notes on intended encounter feel."
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Plain-text design description of this monster's ecology, appearance, and combat style."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    }
+  }
+}

@@ -1,0 +1,31 @@
+name: docs-validation
+on:
+  push:
+    paths:
+      - "docs/**"
+      - "schemas/**"
+      - "tools/**"
+      - "content/**"
+      - "AGENTS.md"
+      - "CHANGELOG.md"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "schemas/**"
+      - "tools/**"
+      - "content/**"
+      - "AGENTS.md"
+      - "CHANGELOG.md"
+
+jobs:
+  validate-docs:
+    name: Validate Documentation and Schemas
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run documentation validation
+        shell: pwsh
+        run: pwsh tools/Validate-Docs.ps1

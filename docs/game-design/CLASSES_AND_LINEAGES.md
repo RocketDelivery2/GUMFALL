@@ -1,4 +1,4 @@
-﻿# Classes and Lineages
+# Classes and Lineages
 
 ## Starting Classes
 

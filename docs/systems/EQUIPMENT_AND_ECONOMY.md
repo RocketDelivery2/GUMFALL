@@ -1,4 +1,4 @@
-﻿# Equipment and Economy
+# Equipment and Economy
 
 ## Equipment Model
 

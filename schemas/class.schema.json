@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gumfall.dev/schemas/class.schema.json",
+  "title": "Class",
+  "description": "Technology-neutral definition of a character class in GUMFALL. The class spine is VERIFIED at 12 classes. Classes have a base level range of 1-12, specialty selection from Level 3, advancement features at Levels 4 and 8, a signature technique at Level 10, and a capstone at Level 12.",
+  "type": "object",
+  "required": [
+    "id", "name", "resource_name", "identity", "specialties",
+    "level_features", "injury_fallback", "exploration_utility",
+    "party_role", "solo_viability", "pvp_counterplay"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier matching a VERIFIED canonical class id.",
+      "enum": [
+        "edgebearer",
+        "pinshot",
+        "skewer",
+        "crusher",
+        "licorice-rogue",
+        "gummy-brawler",
+        "gelomancer",
+        "flavorweaver",
+        "confectioner",
+        "candy-artificer",
+        "syrupwarden",
+        "candysinger"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name matching VERIFIED canonical class name.",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "resource_name": {
+      "type": "string",
+      "description": "Name of the class's primary resource pool.",
+      "examples": [
+        "Edge Alignment", "Focus Marks", "Leverage", "Momentum",
+        "Advantage", "Bounce", "Gel Reserve", "Flavor Charges",
+        "Ingredients", "Capacity", "Conviction", "Tempo"
+      ]
+    },
+    "identity": {
+      "type": "string",
+      "description": "One to two sentence description of what defines this class's gameplay identity and fantasy.",
+      "minLength": 10
+    },
+    "specialties": {
+      "type": "array",
+      "description": "VERIFIED specialty paths available from Level 3. Each class has multiple specialty options.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Specialty identifier in kebab-case.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable specialty name.",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "description": {
+            "type": "string",
+            "description": "Brief description of this specialty's focus and playstyle.",
+            "minLength": 5
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "level_features": {
+      "type": "array",
+      "description": "Features gained at each class level. VERIFIED structure: base 1-12, specialty from 3, advancements at 4 and 8, signature technique at 10, capstone at 12.",
+      "items": {
+        "type": "object",
+        "required": ["level", "feature_name", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "level": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12,
+            "description": "Class level at which this feature is gained."
+          },
+          "feature_name": {
+            "type": "string",
+            "description": "Name of the feature or ability gained.",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "description": {
+            "type": "string",
+            "description": "Mechanical and narrative description of the feature.",
+            "minLength": 5
+          },
+          "specialty_locked": {
+            "type": "boolean",
+            "description": "True if this feature is only available to a specific specialty path."
+          },
+          "specialty_id": {
+            "type": "string",
+            "description": "If specialty_locked is true, which specialty this feature belongs to.",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "injury_fallback": {
+      "type": "string",
+      "description": "How this class adapts when key body regions are injured or destroyed. Physical consequences must remain meaningful (Core Pillar 4).",
+      "minLength": 10
+    },
+    "exploration_utility": {
+      "type": "string",
+      "description": "Description of how this class contributes in exploration, traversal, and non-combat scenarios.",
+      "minLength": 10
+    },
+    "party_role": {
+      "type": "array",
+      "description": "Primary and secondary roles this class fulfills in group play.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "striker", "tank", "controller", "support", "healer",
+          "skirmisher", "artillery", "summoner", "utility"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "solo_viability": {
+      "type": "string",
+      "description": "Assessment of how well this class performs in solo play.",
+      "enum": ["low", "moderate", "high", "class-dependent"]
+    },
+    "pvp_counterplay": {
+      "type": "string",
+      "description": "Design notes on how opponents interact with and counter this class in PvP. Supports Core Pillar 11 (skill-first structured PvP).",
+      "minLength": 10
+    },
+    "description": {
+      "type": "string",
+      "description": "Full narrative and mechanical description of this class."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal design notes, authority labels, or open questions."
+    }
+  }
+}
