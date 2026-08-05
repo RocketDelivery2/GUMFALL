@@ -32,7 +32,7 @@ foreach ($File in $Files) {
     foreach ($Line in ($Content -split "`r?`n")) {
         $LineNumber++
         if ($Line.EndsWith(' ') -or $Line.EndsWith("`t")) {
-            $Findings.Add("Trailing whitespace: $Relative:$LineNumber")
+            $Findings.Add("Trailing whitespace: ${Relative}:$LineNumber")
         }
     }
 
