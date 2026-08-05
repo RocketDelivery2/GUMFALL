@@ -1,0 +1,34 @@
+name: GUMFALL Foundation Static CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gumfall-foundation-static-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: gumfall-foundation-validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate production foundation
+        shell: pwsh
+        run: ./tools/Test-Production-Foundation.ps1 -Root $PWD
+
+      - name: Run canonical documentation validation
+        if: ${{ hashFiles('tools/Validate-Docs.ps1') != '' }}
+        shell: pwsh
+        run: ./tools/Validate-Docs.ps1
+
+      - name: Validate Git whitespace
+        run: git diff --check
