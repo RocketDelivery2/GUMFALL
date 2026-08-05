@@ -1,6 +1,6 @@
 # Veilknife Assassin Specialist
 
-**Status:** PROPOSED  
+**Status:** PROPOSED
 **Base family:** Rogue / Shadow
 
 ## Fantasy
