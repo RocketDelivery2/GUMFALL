@@ -1,6 +1,6 @@
 # GUMFALL Playable Demo Master Plan
 
-**Status:** PROPOSED production baseline  
+**Status:** PROPOSED production baseline
 **Owner and final merge authority:** Christopher Peterson
 
 ## Product order
