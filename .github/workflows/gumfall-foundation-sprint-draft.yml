@@ -1,0 +1,89 @@
+name: GUMFALL Biweekly Sprint Draft
+
+on:
+  schedule:
+    - cron: '0 14 * * 1'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Create draft regardless of week parity
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  draft:
+    name: gumfall-sprint-draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const now = new Date();
+            const first = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+            const week = Math.ceil((((now - first) / 86400000) + first.getUTCDay() + 1) / 7);
+            const force = '${{ inputs.force }}' === 'true';
+
+            if (!force && week % 2 !== 0) {
+              core.notice(`Skipping week ${week}; next even week creates a draft.`);
+              return;
+            }
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            const prs = await github.paginate(github.rest.pulls.list, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            const issueLines = issues
+              .filter(item => !item.pull_request)
+              .slice(0, 30)
+              .map(item => `- #${item.number} ${item.title}`)
+              .join('\n') || '- None';
+
+            const prLines = prs
+              .slice(0, 20)
+              .map(item => `- #${item.number} ${item.title} (${item.draft ? 'draft' : 'ready'})`)
+              .join('\n') || '- None';
+
+            const body = [
+              '## Proposed sprint goal',
+              '',
+              'HUMAN OWNER MUST SET A REALISTIC GOAL.',
+              '',
+              '## Open issue candidates',
+              issueLines,
+              '',
+              '## Open pull requests',
+              prLines,
+              '',
+              '## Required review',
+              '- [ ] P0/P1 and exploits reviewed first',
+              '- [ ] Capacity stated',
+              '- [ ] Requirements/tests linked',
+              '- [ ] Dependencies ready',
+              '- [ ] Displaced work identified',
+              '- [ ] Legal/privacy/security holds respected',
+              '',
+              'This is an automated planning draft, not an approved sprint.'
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[SPRINT DRAFT] Week ${week} — human planning required`,
+              body
+            });
