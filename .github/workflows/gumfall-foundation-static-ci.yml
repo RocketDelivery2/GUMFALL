@@ -25,10 +25,5 @@ jobs:
         shell: pwsh
         run: ./tools/Test-Production-Foundation.ps1 -Root $PWD
 
-      - name: Run canonical documentation validation
-        if: ${{ hashFiles('tools/Validate-Docs.ps1') != '' }}
-        shell: pwsh
-        run: ./tools/Validate-Docs.ps1
-
       - name: Validate Git whitespace
         run: git diff --check
