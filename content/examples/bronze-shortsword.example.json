@@ -1,7 +1,6 @@
 {
   "$schema": "../../schemas/weapon.schema.json",
   "status": "VERIFIED family/material/craftsmanship/level_band | PROPOSED base_force | NOT PERFORMED balance validation",
-  "notes": "Bronze Shortsword is a vertical slice starting weapon. Base force value is a PROPOSED design target pending balance testing.",
   "id": "bronze-shortsword",
   "name": "Bronze Shortsword",
   "family": "swords",
@@ -18,5 +17,5 @@
   "enchantments": [],
   "provenance": "Standard-issue blade produced by Caravan Quarter forges and distributed to Sugar Guard recruits. Bronze material places this firmly in the 1-10 level band per VERIFIED material band table.",
   "condition": "good",
-  "notes": "VERIFIED: Bronze material, Swords family, Common craftsmanship, level band 1-10. Included in vertical slice target. PROPOSED: base_force 12 is a placeholder pending balance review. NOT PERFORMED: attack timing validation, damage output testing."
+  "notes": "Bronze Shortsword is a vertical slice starting weapon. Base force value is a PROPOSED design target pending balance testing. VERIFIED: Bronze material, Swords family, Common craftsmanship, level band 1-10. Included in vertical slice target. PROPOSED: base_force 12 is a placeholder pending balance review. NOT PERFORMED: attack timing validation, damage output testing."
 }
