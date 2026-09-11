@@ -1,15 +1,15 @@
 # Production QA Foundation
 
-**Status:** PROPOSED
+**Status:** PROPOSED — engine/platform-gated; no implementation is authorized while [DEC-001](../governance/DECISION_LOG.md#dec-001) remains OPEN.
 
-The downloadable production package contains a traceability workbook with 140 requirements and 572 mapped test cases. Those cases are a plan, not evidence that 572 tests are implemented or passing.
+The downloadable production package is planned to contain a traceability workbook with 140 requirements and 572 mapped test cases. Those cases are a plan, not evidence that 572 tests are implemented or passing. The technology names below are conditional examples, not selected architecture.
 
 ## Test layers
 
-- pure C# unit tests for combat, Body Integrity, input buffer, Assassin, inventory, idempotency, and priority rules;
-- Unity EditMode tests for deterministic rules, content identifiers, serialization, and build configuration;
-- Unity PlayMode tests for movement, dodge, attacks, enemies, zone loading, UI, and performance probes;
-- API unit/integration tests for status, security headers, telemetry validation, rate limiting, and authentication policy;
+- simulation/content unit tests for combat, Body Integrity, input buffer, Assassin, inventory, idempotency, and priority rules (language UNKNOWN until DEC-001 is resolved);
+- if Unity is selected, Unity EditMode tests for deterministic rules, content identifiers, serialization, and build configuration;
+- if Unity is selected, Unity PlayMode tests for movement, dodge, attacks, enemies, zone loading, UI, and performance probes;
+- if a service stack is selected, API unit/integration tests for status, security headers, telemetry validation, rate limiting, and authentication policy;
 - end-to-end tests for account, character, zone, combat, reward, repair, reconnect, support, and deployment;
 - load, spike/pump, stress, soak, recovery, security, and exploit-regression tests;
 - human combat/playability tests after automated entry gates pass.

@@ -1,6 +1,6 @@
 # Unity and Azure Production Foundation
 
-**Status:** PROPOSED and evidence-gated
+**Status:** PROPOSED and evidence-gated — all Unity, Azure, .NET, and PlayFab references are candidate options only. No engine, language, persistence system, or deployment platform is selected while [DEC-001](../governance/DECISION_LOG.md#dec-001) remains OPEN.
 
 ## Unity client
 
