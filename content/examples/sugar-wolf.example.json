@@ -1,7 +1,6 @@
 {
   "$schema": "../../schemas/monster.schema.json",
   "status": "VERIFIED family/rank/intelligence | DERIVED anatomy | PROPOSED ai_profile details",
-  "notes": "Sugar Wolf is a VERIFIED vertical slice monster. Level band 1-10. Anatomy values are PROPOSED design targets; NOT PERFORMED balance validation.",
   "id": "sugar-wolf",
   "name": "Sugar Wolf",
   "family": "beasts",
@@ -38,8 +37,7 @@
       "connection_strength": 40,
       "armor_coverage": 0.05,
       "vulnerable_to": ["crush"],
-      "resistant_to": [],
-      "notes": "PROPOSED: Destroying the jaw removes bite attacks. Requires gameplay validation."
+      "resistant_to": []
     },
     {
       "region_id": "torso",
@@ -111,8 +109,7 @@
       "connection_strength": 25,
       "armor_coverage": 0.0,
       "vulnerable_to": ["slice"],
-      "resistant_to": [],
-      "notes": "PROPOSED: Tail acts as a balance region. Severing it reduces evasion. Requires gameplay validation."
+      "resistant_to": []
     }
   ],
   "loot_sources": [
@@ -126,5 +123,5 @@
     "notes": "PROPOSED: Sugar Wolves howl to call pack members when above escape threshold and below 40% vitality. Pack call triggers once per encounter. Requires AI validation."
   },
   "description": "A medium-sized predatory beast composed of golden sugar-set gummy material. Sugar Wolves hunt in small packs of 2-4, using coordinated flanking to isolate targets. Their bodies are soft-set and vulnerable to slicing attacks on the limbs. Veteran Wolves show distinctive amber crystallization around the muzzle. Core vertical slice monster used to demonstrate pack AI, limb targeting, and source-grounded loot (wolf-material drops).",
-  "notes": "VERIFIED: Included in vertical slice target. Family Beasts, Rank Standard, Intelligence Instinctive per canonical design. Exact loot weights are in design-private/."
+  "notes": "Sugar Wolf is a VERIFIED vertical slice monster. Level band 1-10. Anatomy values are PROPOSED design targets; NOT PERFORMED balance validation. VERIFIED: Included in vertical slice target. Family Beasts, Rank Standard, Intelligence Instinctive per canonical design. PROPOSED: Destroying the jaw removes bite attacks and severing the tail reduces evasion; both require gameplay validation. Exact loot weights are in design-private/."
 }
