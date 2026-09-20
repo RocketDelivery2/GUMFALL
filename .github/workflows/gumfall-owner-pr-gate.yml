@@ -34,6 +34,10 @@ jobs:
         shell: pwsh
         run: pwsh tools/Test-Production-Foundation.ps1 -Root $PWD
 
+      - name: Validate engine evaluation evidence
+        shell: pwsh
+        run: pwsh tools/Test-EngineEvaluationEvidence.ps1 -Root $PWD
+
       - name: Validate whitespace
         shell: bash
         run: git diff --check
