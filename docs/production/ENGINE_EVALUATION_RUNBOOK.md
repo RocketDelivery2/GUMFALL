@@ -158,6 +158,14 @@ A pass does not establish full combat performance, rendering performance, server
 - asset authoring steps required;
 - iteration pain points and unsupported operations.
 
+For raw frame-timing interchange, use a CSV with exactly these required columns:
+
+```text
+frame,duration_ms
+```
+
+`tools/Summarize-EngineEvaluationFrameTiming.ps1` reports sample count, average, median, p95, maximum frame time, average FPS, and target-frame-budget observations. It summarizes measured data only and does not declare Prototype 3 PASS because the human visual-review requirement remains separate.
+
 ### Pass
 
 The Design Authority accepts the minimum visual result and the test scene maintains the ADR's 60 fps criterion on the declared hardware.
