@@ -1,0 +1,55 @@
+name: Engine Evaluation Collector Windows PowerShell 5.1
+
+on:
+  push:
+    paths:
+      - "tools/Collect-EngineEvaluationEnvironment.ps1"
+      - ".github/workflows/engine-eval-collector-powershell51.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "tools/Collect-EngineEvaluationEnvironment.ps1"
+      - ".github/workflows/engine-eval-collector-powershell51.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: engine-eval-collector-windows-powershell-51
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Execute collector with Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          if ($PSVersionTable.PSVersion.Major -ne 5) {
+              throw "Expected Windows PowerShell 5.x, got $($PSVersionTable.PSVersion)."
+          }
+
+          $Raw = & .\tools\Collect-EngineEvaluationEnvironment.ps1
+          $Result = $Raw | ConvertFrom-Json
+
+          if ($null -eq $Result) {
+              throw "Collector did not return valid JSON."
+          }
+
+          if ($Result.privacy.hostname_collected -ne $false -or
+              $Result.privacy.username_collected -ne $false -or
+              $Result.privacy.serial_numbers_collected -ne $false -or
+              $Result.privacy.network_identifiers_collected -ne $false) {
+              throw "Collector privacy contract changed unexpectedly."
+          }
+
+          if ([string]::IsNullOrWhiteSpace([string]$Result.os.platform)) {
+              throw "Collector did not report an OS platform."
+          }
+
+          if ([string]::IsNullOrWhiteSpace([string]$Result.powershell.version)) {
+              throw "Collector did not report the PowerShell version."
+          }
+
+          Write-Host "Collector smoke test passed under Windows PowerShell $($PSVersionTable.PSVersion)."
