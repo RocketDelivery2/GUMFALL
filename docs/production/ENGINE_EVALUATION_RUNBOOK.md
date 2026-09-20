@@ -39,6 +39,8 @@ The helper `tools/Collect-EngineEvaluationEnvironment.ps1` may be used to captur
 
 Screenshots or videos may support human review but never replace authoritative numeric/log evidence for determinism, Body Integrity, or networking.
 
+Each machine-readable result manifest must validate against `schemas/engine_evaluation_result.schema.json`. The repository gate runs `tools/Test-EngineEvaluationEvidence.ps1`, which also rejects PASS/FAIL manifests that omit execution time, measurements, or evidence artifacts, and rejects selected identifying metadata keys.
+
 Recommended public evidence layout:
 
 ```text
