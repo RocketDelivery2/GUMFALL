@@ -88,7 +88,10 @@ GUMFALL's QA strategy prioritizes the authoritative simulation layer. Because pr
 - For each Enchantment × Ward pair: pressure applied, Ward threshold checked, resistance confirmed or broken.
 - Stack behavior (replace, stack, refresh) behaves as authored.
 - Decay per tick matches authored decay rate.
-- Malady types (Omnislayer, Ruin, Affliction, Finality) resolve with correct escalation behavior.
+- Fire Enchanted contributes Heat/Burning behavior without creating a tenth damage type.
+- Poison Enchanted contributes Poisoned buildup and Wounding Enchanted contributes Wounding buildup to the struck region.
+- Every Malady weapon hit contributes both Poisoned and Wounding buildup in addition to the selected Malady subtype effect.
+- Malady types (Omnislayer, Ruin, Affliction, Finality) resolve with correct escalation behavior without suppressing the Malady baseline Poisoned/Wounding effects.
 - Overmatch trigger: VERIFIED design requirement that Overmatch triggers at the authored threshold. Exact threshold: PRIVATE — test uses authored value from private pipeline.
 
 **Coverage target:** All Enchantment categories × all Ward types. NOT PERFORMED — size depends on authored content.
