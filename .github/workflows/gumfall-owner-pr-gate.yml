@@ -1,0 +1,39 @@
+name: GUMFALL Owner PR Gate
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gumfall-owner-pr-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: gumfall-owner-pr-gate
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == 'RocketDelivery2'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout proposed head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Validate documentation and schemas
+        shell: pwsh
+        run: pwsh tools/Validate-Docs.ps1
+
+      - name: Validate production foundation
+        shell: pwsh
+        run: pwsh tools/Test-Production-Foundation.ps1 -Root $PWD
+
+      - name: Validate whitespace
+        shell: bash
+        run: git diff --check

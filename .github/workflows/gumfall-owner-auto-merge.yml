@@ -1,0 +1,116 @@
+name: GUMFALL Owner Auto Merge
+
+on:
+  workflow_run:
+    workflows: ["GUMFALL Owner PR Gate"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: gumfall-owner-auto-merge-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    name: gumfall-owner-auto-merge
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Squash-merge eligible owner PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const run = context.payload.workflow_run;
+            const linked = run.pull_requests || [];
+
+            if (linked.length !== 1) {
+              core.notice(`Expected exactly one pull request, found ${linked.length}; nothing merged.`);
+              return;
+            }
+
+            const prNumber = linked[0].number;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            const labels = (pr.labels || []).map(label => label.name.toLowerCase());
+            const manualRequested =
+              /\[manual\]/i.test(pr.title || '') ||
+              labels.includes('manual-merge');
+
+            if (pr.state !== 'open') {
+              core.notice(`PR #${prNumber} is not open.`);
+              return;
+            }
+
+            if (pr.draft) {
+              core.notice(`PR #${prNumber} is still a draft.`);
+              return;
+            }
+
+            if (manualRequested) {
+              core.notice(`PR #${prNumber} opted out of automatic merge.`);
+              return;
+            }
+
+            if (pr.base.ref !== 'main') {
+              core.notice(`PR #${prNumber} does not target main.`);
+              return;
+            }
+
+            if (!pr.head.repo || pr.head.repo.full_name !== context.repo.owner + '/' + context.repo.repo) {
+              core.notice(`PR #${prNumber} does not originate from this repository.`);
+              return;
+            }
+
+            if (!pr.user || pr.user.login !== 'RocketDelivery2') {
+              core.notice(`PR #${prNumber} was not opened by RocketDelivery2.`);
+              return;
+            }
+
+            if (pr.head.sha !== run.head_sha) {
+              core.notice(`PR #${prNumber} moved after the successful gate; a new gate run is required.`);
+              return;
+            }
+
+            let mergeable = pr.mergeable;
+            let mergeableState = pr.mergeable_state;
+
+            for (let attempt = 0; attempt < 6 && mergeable === null; attempt++) {
+              await new Promise(resolve => setTimeout(resolve, 5000));
+              const refreshed = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              mergeable = refreshed.data.mergeable;
+              mergeableState = refreshed.data.mergeable_state;
+            }
+
+            if (mergeable !== true) {
+              core.setFailed(
+                `PR #${prNumber} is not mergeable. mergeable=${mergeable}, state=${mergeableState}`
+              );
+              return;
+            }
+
+            const result = await github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              merge_method: 'squash',
+              sha: pr.head.sha
+            });
+
+            if (!result.data.merged) {
+              core.setFailed(result.data.message || `GitHub did not merge PR #${prNumber}.`);
+              return;
+            }
+
+            core.notice(`Automatically squash-merged PR #${prNumber} at ${result.data.sha}.`);
