@@ -2,7 +2,7 @@
 
 **Status:** OPEN — No engine has been selected. VERIFIED.
 **Label Policy:** VERIFIED | DERIVED | PROPOSED | ASSUMPTION | UNKNOWN | NOT PERFORMED
-**Related:** [Architecture](../technical/ARCHITECTURE.md) · [Risk Register](RISK_REGISTER.md) · [Index](../INDEX.md)
+**Related:** [Architecture](../technical/ARCHITECTURE.md) · [Risk Register](RISK_REGISTER.md) · [Engine Evaluation Runbook](ENGINE_EVALUATION_RUNBOOK.md) · [Index](../INDEX.md)
 
 ---
 
