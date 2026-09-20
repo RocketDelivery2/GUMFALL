@@ -23,6 +23,8 @@ Every candidate run must preserve the same authoritative simulation intent and r
 
 Each candidate/prototype run must record:
 
+The helper `tools/Collect-EngineEvaluationEnvironment.ps1` may be used to capture a non-identifying environment JSON baseline. It intentionally excludes hostname, username, serial numbers, and network identifiers.
+
 - engine name and exact version;
 - engine modules/packages used;
 - operating system and build;
