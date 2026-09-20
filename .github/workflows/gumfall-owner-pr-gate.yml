@@ -54,6 +54,10 @@ jobs:
         shell: pwsh
         run: ./tools/Test-EngineEvaluationFrameTimingTool.ps1 -Root $PWD
 
+      - name: Self-test Prototype 4 reconciliation tooling
+        shell: pwsh
+        run: ./tools/Test-EngineEvaluationReconciliationTool.ps1 -Root $PWD
+
       - name: Validate whitespace
         shell: bash
         run: git diff --check
