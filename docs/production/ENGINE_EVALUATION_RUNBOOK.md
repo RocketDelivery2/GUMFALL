@@ -80,6 +80,8 @@ Do not commit credentials, proprietary SDK material, private anti-cheat logic, p
 - explicit divergence tick if any;
 - whether engine physics participated in authoritative resolution.
 
+Candidate spikes may emit the neutral JSON trace defined by `schemas/engine_evaluation_trace.schema.json`. Use `tools/Compare-EngineEvaluationDeterminismTrace.ps1` to compare baseline and replay traces and report the first authoritative-state divergence. The comparator is evidence tooling only; it does not make an engine decision.
+
 ### Pass
 
 Same-platform replay produces no authoritative-state divergence for the tested scenario.
