@@ -166,6 +166,8 @@ The Design Authority accepts the minimum visual result and the test scene mainta
 
 Visual quality is inherently a human review item. Performance measurements remain quantitative evidence.
 
+Use [ENGINE_EVALUATION_VISUAL_REVIEW.md](ENGINE_EVALUATION_VISUAL_REVIEW.md) to record the required human presentation judgment against the same source SHA and retained capture used for the Prototype 3 performance evidence.
+
 ---
 
 ## 6. Prototype 4 — Server-Authoritative Networking
