@@ -50,6 +50,10 @@ jobs:
         shell: pwsh
         run: ./tools/Test-EngineEvaluationPassContractTool.ps1 -Root $PWD
 
+      - name: Self-test Prototype 3 frame timing tooling
+        shell: pwsh
+        run: ./tools/Test-EngineEvaluationFrameTimingTool.ps1 -Root $PWD
+
       - name: Validate whitespace
         shell: bash
         run: git diff --check
