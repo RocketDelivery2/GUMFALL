@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/RocketDelivery2/GUMFALL/main/schemas/engine_evaluation_result.schema.json",
+  "title": "Engine Evaluation Result",
+  "description": "Machine-readable result manifest for a GUMFALL engine-evaluation prototype execution. This records evidence; it does not select or rank an engine.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate",
+    "prototype",
+    "result",
+    "source_sha",
+    "engine",
+    "environment",
+    "measurements",
+    "artifacts",
+    "limitations"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "candidate": {
+      "type": "string",
+      "enum": ["unity", "unreal", "godot", "o3de", "custom"]
+    },
+    "prototype": {
+      "type": "string",
+      "enum": [
+        "prototype-1-determinism",
+        "prototype-2-body-integrity-budget",
+        "prototype-3-gummy-deformation",
+        "prototype-4-server-authority"
+      ]
+    },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "BLOCKED", "NOT_PERFORMED"]
+    },
+    "executed_at_utc": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "source_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{40}$"
+    },
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "modules"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["os", "cpu"],
+      "properties": {
+        "os": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cpu": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ram_bytes": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "gpu": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}
