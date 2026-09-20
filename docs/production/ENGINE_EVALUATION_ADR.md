@@ -32,7 +32,9 @@ GUMFALL is a third-person physical action RPG with a set of requirements that ar
 
 5. **Content-driven design.** All abilities, items, monsters, and progression gates are defined in data, not code. The engine must support data-driven content at scale without requiring engine source modification.
 
-No engine has been evaluated yet. NOT PERFORMED.
+No GUMFALL prototype benchmark has been completed yet. NOT PERFORMED.
+
+Public capability/licensing evidence has been refreshed as of 2026-09-20 in Section 3.1. That evidence narrows what needs to be prototyped, but it does not resolve DEC-001.
 
 ---
 
@@ -180,6 +182,46 @@ The following engines are known candidates for evaluation. No recommendation is 
 
 ---
 
+## 3.1 Evidence Refresh — 2026-09-20
+
+**Status:** VERIFIED public capability/licensing evidence / NOT PERFORMED GUMFALL-specific benchmark evidence.
+
+This refresh records what official vendor/project documentation establishes today. It is not an engine ranking and does not substitute for Prototypes 1–4.
+
+| Candidate | Public evidence confirmed | Still requires GUMFALL prototype |
+|---|---|---|
+| Unity 6 | Unity documents a Dedicated Server build target for Windows/Linux server builds. Unity 6 exposes runtime mesh vertex APIs such as `Mesh.SetVertices` and ships the Animation Rigging package. Unity cancelled the Runtime Fee for games customers in 2024. | Bit-identical deterministic simulation; Body Integrity tick budget; gummy deformation visual/performance quality; authoritative networking/reconciliation implementation; current commercial plan fit at decision time. |
+| Unreal Engine 5 | Epic documents a client-server model with the server as authoritative host and a headless dedicated-server workflow. Current standard game licensing states 5% royalty on lifetime gross revenue above the first US$1M attributable to the product, subject to the current EULA. | Bit-identical deterministic simulation independent of presentation physics; Body Integrity budget; runtime gummy deformation/separation quality; content-authoring workflow fit; measured team iteration cost. |
+| Godot 4 | Godot documents dedicated-server/headless exports. Godot Engine is MIT licensed and permits commercial use subject to license notice requirements. | Deterministic simulation strategy; server-authoritative gameplay architecture at GUMFALL scale; Body Integrity budget; deformation/animation quality; tooling and hiring/maintenance fit. |
+| O3DE | O3DE's Multiplayer Gem documents a server-authoritative model, entity replication, RPCs, local prediction, and network input handling; O3DE supports separate server/client launchers. The O3DE repository states Apache 2.0 as the default license with an MIT option, with third-party components carrying their own terms. | Deterministic simulation; Body Integrity budget; gummy deformation/animation quality; editor/content workflow; build complexity; team/hiring and long-term maintenance cost. |
+| Custom/Bespoke | No third-party engine license constrains the simulation layer. | Essentially every production capability: renderer, editor/tooling, animation, asset pipeline, networking, platform support, profiling, deployment, and long-term maintenance. |
+
+**Official evidence links reviewed 2026-09-20:**
+
+- Unity Dedicated Server build: https://docs.unity3d.com/6000.0/Documentation/Manual/dedicated-server-build.html
+- Unity Mesh.SetVertices: https://docs.unity3d.com/6000.0/ScriptReference/Mesh.SetVertices.html
+- Unity Animation Rigging package: https://docs.unity3d.com/6000.0/Manual/com.unity.animation.rigging.html
+- Unity Runtime Fee cancellation: https://unity.com/blog/unity-is-canceling-the-runtime-fee
+- Unreal dedicated servers: https://dev.epicgames.com/documentation/unreal-engine/setting-up-dedicated-servers-in-unreal-engine
+- Unreal licensing: https://www.unrealengine.com/license
+- Godot dedicated servers: https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_dedicated_servers.html
+- Godot license: https://godotengine.org/license/
+- O3DE Multiplayer Gem: https://docs.o3de.org/docs/user-guide/gems/reference/multiplayer/multiplayer-gem/
+- O3DE client/server separation: https://docs.o3de.org/docs/user-guide/networking/multiplayer/code_separation/
+- O3DE license: https://github.com/o3de/o3de/blob/development/LICENSE.txt
+
+### Evidence Consequence
+
+[DERIVED] All four third-party engine candidates have a documented path to dedicated/headless or server-oriented execution, so "can produce a server process" alone is not a sufficient discriminator.
+
+[DERIVED] Licensing is now clearer than the previous draft implied: Unity's game Runtime Fee was cancelled; Unreal retains a royalty model above its published revenue threshold; Godot and O3DE use permissive open-source licenses subject to their stated notice/third-party obligations.
+
+[VERIFIED] None of the public documentation above proves GUMFALL's strict bit-identical determinism requirement, 32×8 Body Integrity performance target, acceptable gummy deformation quality, or acceptable reconciliation behavior under the project's target latency.
+
+[NOT PERFORMED] No candidate receives a pass/fail result from this evidence refresh.
+
+---
+
 ## 4. Evaluation Methodology
 
 Before the decision is made, the following prototype investigations must be completed. NOT PERFORMED.
@@ -264,5 +306,5 @@ Until this decision is made, all downstream work is design-only. VERIFIED.
 
 ---
 
-*Last updated: 2026-08-02 | Branch: design/full-game-bible-20260802-223853*
+*Last evidence refresh: 2026-09-20 | DEC-001 remains OPEN*
 *Owner must set decision deadline. See [DECISION_LOG](../governance/DECISION_LOG.md) for tracking.*
