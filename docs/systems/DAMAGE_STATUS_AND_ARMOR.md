@@ -51,6 +51,8 @@ Addition to the status effect accumulation counter for a relevant status. Buildu
 - When buildup reaches the activation threshold, the status effect activates
 - Buildup decays over time (different decay rates per status)
 - Fortitude and status-specific resistances reduce buildup rate
+- Fire Enchanted contributes Burning buildup, Poison Enchanted contributes Poisoned buildup, and Wounding Enchanted contributes Wounding buildup
+- Every Malady weapon hit contributes both Poisoned and Wounding buildup in addition to the Malady subtype's existing effect
 
 ---
 
@@ -275,6 +277,18 @@ Each armor piece has the following statistics:
 **Duration:** Fixed, reduced by cold application
 **Cure:** Cold water/syrup immersion, Blue Frost ability, consumable (Cold Gel)
 **Special:** Burning region's armor takes condition damage from internal heat
+
+---
+
+### Poisoned
+
+**Status:** VERIFIED (identity, sources, continuous Core Vitality drain) / PROPOSED (numeric buildup, duration, stacking, and PvP tuning)
+**Description:** A persistent toxic status applied by Poison Enchanted weapons and by every Malady weapon hit.
+**Buildup:** Poison Enchanted weapon hits; all Malady weapon hits.
+**Effect:** Continuous Core Vitality drain while Poisoned is active.
+**Duration:** Balance-authored; no fixed public numeric duration is established yet.
+**Cure:** UNKNOWN — cleansing and treatment interactions require separate design authority before numeric or item-specific cures are fixed.
+**PvP:** Exact stacking and diminishing-return behavior is PROPOSED and must be balance-tested.
 
 ---
 
