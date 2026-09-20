@@ -105,3 +105,5 @@ finally {
         Remove-Item -LiteralPath $TempRoot -Recurse -Force
     }
 }
+
+exit 0
