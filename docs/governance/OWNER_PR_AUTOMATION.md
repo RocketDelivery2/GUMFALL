@@ -1,6 +1,6 @@
 # Owner PR Automation
 
-**Status:** VERIFIED for automatic merge / EXTERNAL AUTOMATION for PR creation.
+**Status:** VERIFIED automatic merge / PROPOSED repository-native PR creation pending first successful push-triggered run.
 
 GUMFALL automatically validates and squash-merges eligible owner-authored pull requests after the owner gate succeeds.
 
@@ -29,11 +29,9 @@ Automatic merge applies only when the pull request:
 
 ## Automatic PR creation
 
-Repository-native GitHub Actions PR creation is not currently enabled because the repository Actions setting rejects PR creation by `GITHUB_TOKEN` with:
+`.github/workflows/gumfall-owner-auto-pr.yml` attempts repository-native PR creation for eligible owner pushes using `GITHUB_TOKEN` with `pull-requests: write`.
 
-`GitHub Actions is not permitted to create or approve pull requests.`
-
-To avoid a failing workflow on every branch push, PR creation is handled by the connected GitHub automation outside GitHub Actions.
+The repository must allow Actions to create pull requests. Until a push-triggered run successfully creates a PR, this path remains PROPOSED and the connected GitHub automation remains the fallback so work is not blocked.
 
 Eligible owner branches use these prefixes:
 
@@ -46,6 +44,8 @@ Eligible owner branches use these prefixes:
 - `ci/`
 - `test/`
 - `chore/`
+- `tools/`
+- `schema/`
 
 The automation should create a PR only when the branch is ahead of `main`, no open PR exists, and no manual opt-out is present.
 
