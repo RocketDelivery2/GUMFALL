@@ -46,7 +46,7 @@ foreach ($Row in $Rows) {
         [System.Globalization.CultureInfo]::InvariantCulture,
         [ref]$DurationValue
     )) {
-        throw "Invalid duration_ms value at tick $TickValue: $($Row.duration_ms)"
+        throw "Invalid duration_ms value at tick ${TickValue}: $($Row.duration_ms)"
     }
 
     if ($DurationValue -lt 0) {
