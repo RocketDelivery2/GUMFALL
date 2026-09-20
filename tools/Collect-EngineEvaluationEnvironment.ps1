@@ -43,7 +43,7 @@ function Get-CommandVersion {
     }
 }
 
-$Os = [ordered]@{
+# `$IsWindows and `$IsLinux are not available in Windows PowerShell 5.1.`n$IsWindowsPlatform = $env:OS -eq 'Windows_NT'`n$IsLinuxPlatform = (-not $IsWindowsPlatform) -and [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Linux)`n`n$Os = [ordered]@{
     platform = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
     architecture = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString()
 }
@@ -56,7 +56,7 @@ $Cpu = [ordered]@{
 $MemoryBytes = $null
 $GpuNames = @()
 
-if ($IsWindows) {
+if ($IsWindowsPlatform) {
     try {
         $CpuInfo = Get-CimInstance Win32_Processor | Select-Object -First 1
         if ($null -ne $CpuInfo) {
@@ -85,7 +85,7 @@ if ($IsWindows) {
     } catch {
         $GpuNames = @()
     }
-} elseif ($IsLinux) {
+} elseif ($IsLinuxPlatform) {
     if (Test-Path /proc/cpuinfo) {
         $ModelLine = Get-Content /proc/cpuinfo |
             Where-Object { $_ -match '^model name\s*:' } |
