@@ -12,6 +12,7 @@ The gate requires:
 
 - `tools/Validate-Docs.ps1`
 - `tools/Test-Production-Foundation.ps1 -Root $PWD`
+- `tools/Test-EngineEvaluationEvidence.ps1 -Root $PWD`
 - `git diff --check`
 
 Automatic merge applies only when the pull request:
