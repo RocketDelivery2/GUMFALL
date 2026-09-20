@@ -46,6 +46,10 @@ jobs:
         shell: pwsh
         run: pwsh tools/Test-EngineEvaluationBodyIntegrityTimingTool.ps1 -Root $PWD
 
+      - name: Self-test Prototype 3/4 PASS evidence contracts
+        shell: pwsh
+        run: ./tools/Test-EngineEvaluationPassContractTool.ps1 -Root $PWD
+
       - name: Validate whitespace
         shell: bash
         run: git diff --check
