@@ -447,7 +447,9 @@ All 12 lineages: Bearkin, Wormkin, Ringborn, Gumdrop Folk, Jellybean Folk, Bottl
 
 ## 15. Monster
 
-**Purpose:** Defines a monster: its anatomy, AI configuration, encounter role, and base combat parameters.
+**Purpose:** Defines a monster's family, anatomy, composition, combat roles, intelligence, temperament, rank, faction context, loot ecology, and technology-neutral AI profile.
+
+The canonical public contract is `schemas/monster.schema.json`. The field names below intentionally match that schema.
 
 **Required fields:**
 
@@ -455,27 +457,36 @@ All 12 lineages: Bearkin, Wormkin, Ringborn, Gumdrop Folk, Jellybean Folk, Bottl
 |---|---|---|
 | `id` | string (unique) | Canonical identifier |
 | `name` | string | Display name |
-| `anatomy_id` | string | Anatomy (body region configuration) |
-| `composition_id` | string | Composition (material interaction) |
-| `ai_profile_id` | string | AI behavior profile |
-| `rank` | MonsterRank enum | Common, Elite, Captain, Royal, Boss |
-| `base_level` | int | Base encounter level |
-| `loot_source_ids` | string[] | Loot sources this monster drops from |
-| `version` | semver string | Data contract version |
+| `family` | MonsterFamily enum | Creature family |
+| `composition` | Composition enum | Physical composition |
+| `flavor` | Flavor enum | Flavor affinity |
+| `roles` | CombatRole[] | One or more encounter/combat roles |
+| `rank` | MonsterRank enum | Minion, Standard, Veteran, Elite, Champion, Boss, Mythic |
+| `intelligence` | Intelligence enum | Instinctive, Trained, Tactical, Strategic |
+| `temperament` | Temperament enum | Default non-combat behavioral stance |
+| `level_band` | { min, max } | Authored level range |
+| `anatomy_regions` | MonsterRegion[] | Per-region Body Integrity properties |
+| `loot_sources` | string[] | LootSource identifiers defining loot ecology |
+| `ai_profile` | MonsterAIProfile | Technology-neutral behavior archetype and priorities |
 
 **Optional fields:**
 
 | Field | Type | Default | Description |
 |---|---|---|---|
-| `ability_ids` | string[] | [] | Abilities available to this monster |
-| `faction_id` | string | null | Faction membership |
-| `knowledge_reward` | MonsterKnowledgeSpec | null | What is revealed when player studies this monster |
-| `surrender_capable` | bool | false | Whether AI may trigger surrender |
-| `description` | string | null | Authoring description |
-| `lore` | string | null | Narrative lore |
+| `faction_id` | string | null | Canonical faction membership; omitted for unaffiliated creatures |
+| `description` | string | null | Ecology, appearance, and combat-style description |
+| `status` | string | null | Authority labels for the authored record |
+| `notes` | string | null | Design notes and unresolved questions |
+
+**Authoring rules:**
+
+- Anatomy is authoritative gameplay state; presentation does not determine region outcomes.
+- `loot_sources` reference source-grounded loot definitions. Protected drop weights do not belong in public monster records.
+- Faction membership is optional and must not duplicate full faction standing/diplomacy state.
+- AI fields describe behavior intent, not an engine-specific behavior-tree implementation.
+- Monster Knowledge rewards are a separate progression/content concern and must not be invented inside this contract before their own specification is accepted.
 
 ---
-
 ## 16. Encounter
 
 **Purpose:** Defines a scripted or procedural encounter: participant configuration, spawn conditions, and victory criteria.
