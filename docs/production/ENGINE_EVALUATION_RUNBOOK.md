@@ -200,6 +200,8 @@ Inputs reliably reach the server, authoritative state returns to both clients, a
 
 The ADR's human-visible "without visible pop" criterion must be reviewed from the capture; it is not inferred from logs alone.
 
+Use [ENGINE_EVALUATION_NETWORK_EVIDENCE.md](ENGINE_EVALUATION_NETWORK_EVIDENCE.md) to record server/client build identity, latency conditions, ordered inputs, authoritative state, reconciliation events, desync/errors, and the separate human visible-pop review.
+
 ---
 
 ## 7. Candidate Execution Rules
