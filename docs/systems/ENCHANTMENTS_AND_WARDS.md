@@ -1,5 +1,5 @@
 # GUMFALL — Enchantments and Wards
-**Status:** VERIFIED (probability table, rank multipliers, overmatch formula, malady types) / PROPOSED (enchantment category lists, ward categories)
+**Status:** VERIFIED (probability table, rank multipliers, overmatch formula, malady types, Fire Enchanted, Poison Enchanted, Wounding Enchanted, Malady baseline Poisoned + Wounding) / PROPOSED (remaining enchantment category lists, ward categories, numeric tuning)
 **Cross-references:** [Damage, Status, and Armor](DAMAGE_STATUS_AND_ARMOR.md) · [Weapons, Mastery, and Equipment](WEAPONS_MASTERY_AND_EQUIPMENT.md) · [Crafting, Economy, and Loot](CRAFTING_ECONOMY_AND_LOOT.md) · [Progression](PROGRESSION.md)
 
 ---
@@ -70,9 +70,13 @@ Enchantments that deal increased damage or apply special effects against specifi
 
 Enchantments that enhance the weapon's ability to cause or worsen specific body conditions.
 
+**Named weapon enchantments — VERIFIED:**
+- **Poison Enchanted:** Weapon hits apply Poisoned status buildup. Poison is a status effect rather than a tenth damage type; exact pressure, buildup, duration, and stacking values remain balance-authored.
+- **Wounding Enchanted:** Weapon hits apply Wounding status buildup to the struck body region. This can compound with native Slice or Pierce Wounding buildup where the underlying attack already causes Wounding. Exact pressure and buildup values remain balance-authored.
+
 **Types:**
 - Connection Severers (increased Connection Strength damage at joints)
-- Wound Deepeners (enhanced Wounding status buildup)
+- Wound Deepeners (enhanced Wounding status buildup; Wounding Enchanted is the named baseline form)
 - Crystal Splintering (enhanced Crystallizing buildup)
 - Adhesion Dissolvers (reduces target's Adhesion on hit)
 - Deformation Amplifiers (enhanced Deformation severity)
@@ -85,8 +89,11 @@ Enchantments that enhance the weapon's ability to cause or worsen specific body 
 
 Enchantments that add or enhance elemental damage types.
 
+**Named weapon enchantment — VERIFIED:**
+- **Fire Enchanted:** Weapon hits add Heat pressure and Burning buildup. Fire Enchanted uses the existing Heat/Burning rules rather than creating a new damage type. Exact pressure and buildup values remain balance-authored.
+
 **Types:**
-- Flame Imbue (adds Heat damage)
+- Flame Imbue (adds Heat damage; Fire Enchanted is the canonical named baseline fire form)
 - Frost Edge (adds Cold damage)
 - Sour Coat (adds Sour damage)
 - Sugar Blessing (adds Sugar damage — uncommon, primarily defensive items)
@@ -150,6 +157,8 @@ A Malady is a cursed enchantment. It replaces enchantments (a Malady item does n
 - Some Maladies can be partially countered by specific Sanctuary effects
 - A Malady item's power typically far exceeds the power of a standard one-, two-, or three-enchantment item
 - Malady items cannot be crafted intentionally — they are only found
+- **VERIFIED:** Every Malady weapon hit applies both Poisoned buildup and Wounding buildup in addition to the selected Malady subtype's existing effect. Poisoned and Wounding do not replace, suppress, or consume the subtype effect.
+- **PROPOSED/UNKNOWN numeric tuning:** Exact Malady Poisoned/Wounding pressure, buildup, duration, stacking, and PvP normalization values remain balance-authored.
 
 ### Malady Type 1: Omnislayer
 
@@ -171,7 +180,7 @@ A Malady is a cursed enchantment. It replaces enchantments (a Malady item does n
 
 ### Malady Type 3: Affliction
 
-**Effect:** Attacks cause an Affliction — a unique compounded status that combines multiple status effects simultaneously (e.g., Burning + Crystallizing simultaneously, or Sourrot + Wounding).
+**Effect:** Attacks cause an Affliction — a unique compounded status. Like every Malady hit, Affliction first applies Poisoned and Wounding buildup, then adds its subtype's additional compounded status effects (for example Burning + Crystallizing, or Sourrot plus another authored status). The Poisoned and Wounding baseline remains present alongside those additional effects.
 **Cost:** The Affliction is contagious — nearby allies of the wielder are not immune to the Affliction's secondary spread.
 **Sanctuary partial counter:** Cleansing Sanctuary effects reduce Affliction spread radius and slow buildup.
 **Design Note:** Affliction is the "careful" Malady — powerful but requires awareness of friendly fire risk.
