@@ -105,3 +105,6 @@ finally {
         Remove-Item -LiteralPath $TempRoot -Recurse -Force
     }
 }
+
+# The divergent child process intentionally exits 1; reset the wrapper's final native exit code.
+exit 0
