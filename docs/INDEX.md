@@ -176,6 +176,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 | Document | Status | Description |
 |---|---|---|
 | [Vertical Slice](production/VERTICAL_SLICE.md) | DRAFT | Vertical slice spec, success criteria, system deps |
+| [Level 1–3 Progression](production/LEVEL_1_3_PROGRESSION.md) | PROPOSED/VERIFIED | First playable class, XP, proficiency, Monster Knowledge hook, camp leveling, Recasting |
 | [QA Strategy](production/QA_STRATEGY.md) | DRAFT | All test types, coverage targets, bug severity |
 | [Risk Register](production/RISK_REGISTER.md) | DRAFT | 21 tracked risks with mitigations |
 | [Engine Evaluation ADR](production/ENGINE_EVALUATION_ADR.md) | OPEN | Engine criteria, candidates, methodology |

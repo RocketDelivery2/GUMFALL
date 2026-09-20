@@ -168,7 +168,7 @@ The following are explicitly excluded from the vertical slice. Including them ri
 - Malady types. PROPOSED exclusion.
 - Multiplayer beyond 2-player (co-op or 1v1 duel). PROPOSED exclusion.
 - Ranked PvP divisions and matchmaking. PROPOSED exclusion.
-- Monster Knowledge system. PROPOSED exclusion.
+- Full Monster Knowledge system. PROPOSED exclusion. A minimal Level 1–3 knowledge-entry hook is allowed by [Level 1–3 Progression](LEVEL_1_3_PROGRESSION.md); no full reward tree or protected knowledge is in slice scope.
 - Factions beyond Bronze Paw (for combat encounters). PROPOSED exclusion.
 - Companions (hinted, not playable). PROPOSED exclusion.
 - Post-Level-3 progression. VERIFIED exclusion.
