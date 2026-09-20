@@ -27,7 +27,13 @@
     },
     "candidate": {
       "type": "string",
-      "enum": ["unity", "unreal", "godot", "o3de", "custom"]
+      "enum": [
+        "unity",
+        "unreal",
+        "godot",
+        "o3de",
+        "custom"
+      ]
     },
     "prototype": {
       "type": "string",
@@ -40,10 +46,18 @@
     },
     "result": {
       "type": "string",
-      "enum": ["PASS", "FAIL", "BLOCKED", "NOT_PERFORMED"]
+      "enum": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "NOT_PERFORMED"
+      ]
     },
     "executed_at_utc": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "format": "date-time"
     },
     "source_sha": {
@@ -53,7 +67,11 @@
     "engine": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "version", "modules"],
+      "required": [
+        "name",
+        "version",
+        "modules"
+      ],
       "properties": {
         "name": {
           "type": "string",
@@ -75,7 +93,10 @@
     "environment": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["os", "cpu"],
+      "required": [
+        "os",
+        "cpu"
+      ],
       "properties": {
         "os": {
           "type": "string",
@@ -86,11 +107,17 @@
           "minLength": 1
         },
         "ram_bytes": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0
         },
         "gpu": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -116,5 +143,143 @@
     "notes": {
       "type": "string"
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "prototype": {
+            "const": "prototype-3-gummy-deformation"
+          },
+          "result": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "prototype",
+          "result"
+        ]
+      },
+      "then": {
+        "properties": {
+          "measurements": {
+            "type": "object",
+            "required": [
+              "runtime_stretch_compress_visible",
+              "limb_separation_visible",
+              "post_separation_animation_visible",
+              "ik_or_procedural_adjustment_visible",
+              "visual_review_result",
+              "capture_artifact",
+              "average_fps"
+            ],
+            "properties": {
+              "runtime_stretch_compress_visible": {
+                "const": true
+              },
+              "limb_separation_visible": {
+                "const": true
+              },
+              "post_separation_animation_visible": {
+                "const": true
+              },
+              "ik_or_procedural_adjustment_visible": {
+                "const": true
+              },
+              "visual_review_result": {
+                "const": "ACCEPTABLE FOR ENGINE EVALUATION"
+              },
+              "capture_artifact": {
+                "type": "string",
+                "minLength": 1
+              },
+              "average_fps": {
+                "type": "number",
+                "minimum": 60
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "prototype": {
+            "const": "prototype-4-server-authority"
+          },
+          "result": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "prototype",
+          "result"
+        ]
+      },
+      "then": {
+        "properties": {
+          "measurements": {
+            "type": "object",
+            "required": [
+              "client_count",
+              "simulated_latency_ms",
+              "inputs_reached_authoritative_server",
+              "authoritative_state_returned_to_both_clients",
+              "deliberate_prediction_mismatch_injected",
+              "reconciliation_observed",
+              "server_authority_preserved",
+              "visible_pop_review",
+              "input_log_artifact",
+              "authoritative_state_log_artifact",
+              "reconciliation_log_artifact",
+              "errors_desync_artifact"
+            ],
+            "properties": {
+              "client_count": {
+                "const": 2
+              },
+              "simulated_latency_ms": {
+                "const": 60
+              },
+              "inputs_reached_authoritative_server": {
+                "const": true
+              },
+              "authoritative_state_returned_to_both_clients": {
+                "const": true
+              },
+              "deliberate_prediction_mismatch_injected": {
+                "const": true
+              },
+              "reconciliation_observed": {
+                "const": true
+              },
+              "server_authority_preserved": {
+                "const": true
+              },
+              "visible_pop_review": {
+                "const": "ACCEPTABLE FOR ENGINE EVALUATION"
+              },
+              "input_log_artifact": {
+                "type": "string",
+                "minLength": 1
+              },
+              "authoritative_state_log_artifact": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reconciliation_log_artifact": {
+                "type": "string",
+                "minLength": 1
+              },
+              "errors_desync_artifact": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
