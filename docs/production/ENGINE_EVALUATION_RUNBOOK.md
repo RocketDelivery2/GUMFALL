@@ -202,6 +202,14 @@ Use [ENGINE_EVALUATION_VISUAL_REVIEW.md](ENGINE_EVALUATION_VISUAL_REVIEW.md) to 
 - visual capture for reconciliation quality;
 - measured correction distance/time where available.
 
+For reconciliation-event interchange, use a CSV with exactly these required columns:
+
+```text
+event_id,client_role,predicted_value,authoritative_value,correction_magnitude,correction_ms,server_authority_preserved
+```
+
+`tools/Summarize-EngineEvaluationReconciliation.ps1` reports reconciliation-event count, correction-time/magnitude summaries, and authority-violation counts. It summarizes recorded evidence only and does not establish the remaining Prototype 4 conditions such as two-client execution, the 60 ms latency condition, retained input/state logs, or human visible-pop review.
+
 ### Pass
 
 Inputs reliably reach the server, authoritative state returns to both clients, and the deliberate mismatch is reconciled without violating simulation authority.
