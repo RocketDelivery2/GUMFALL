@@ -119,9 +119,17 @@ Each tick performs one deterministic damage event per entity and evaluates the a
 - allocations per tick if the engine profiler exposes them;
 - profiler capture or raw timing artifact.
 
+For raw tick timing interchange, use a CSV with exactly these required columns:
+
+```text
+tick,duration_ms
+```
+
+`tools/Summarize-EngineEvaluationBodyIntegrityTiming.ps1` reports sample count, average, median, p95, maximum, and the number of ticks exceeding the declared threshold. The summarizer does not run the engine benchmark and does not substitute for profiler evidence.
+
 ### Pass
 
-The benchmark satisfies the ADR's stated 2 ms/tick criterion under the declared test conditions.
+The benchmark satisfies the ADR's stated 2 ms/tick criterion under the declared test conditions. The repository summarizer treats the criterion as all recorded authoritative-simulation tick samples at or below 2.0 ms unless the ADR is explicitly revised.
 
 ### Not proven by a pass
 

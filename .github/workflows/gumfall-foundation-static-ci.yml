@@ -33,5 +33,9 @@ jobs:
         shell: pwsh
         run: ./tools/Test-EngineEvaluationDeterminismTraceTool.ps1 -Root $PWD
 
+      - name: Self-test Body Integrity timing tooling
+        shell: pwsh
+        run: ./tools/Test-EngineEvaluationBodyIntegrityTimingTool.ps1 -Root $PWD
+
       - name: Validate Git whitespace
         run: git diff --check
