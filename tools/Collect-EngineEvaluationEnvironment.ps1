@@ -43,9 +43,13 @@ function Get-CommandVersion {
     }
 }
 
-# `$IsWindows and `$IsLinux are not available in Windows PowerShell 5.1.`n$IsWindowsPlatform = $env:OS -eq 'Windows_NT'`n$IsLinuxPlatform = (-not $IsWindowsPlatform) -and [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Linux)`n`n$Os = [ordered]@{
+# $IsWindows and $IsLinux are not available in Windows PowerShell 5.1.
+$IsWindowsPlatform = $env:OS -eq 'Windows_NT'
+$IsLinuxPlatform = (-not $IsWindowsPlatform) -and [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Linux)
+
+$Os = [ordered]@{
     platform = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
-    architecture = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString()
+    architecture = ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture).ToString()
 }
 
 $Cpu = [ordered]@{
