@@ -6,7 +6,7 @@
   "type": "object",
   "required": [
     "id", "name", "family", "composition", "flavor",
-    "roles", "rank", "intelligence", "level_band",
+    "roles", "rank", "intelligence", "temperament", "level_band",
     "anatomy_regions", "loot_sources", "ai_profile"
   ],
   "additionalProperties": false,
@@ -197,6 +197,11 @@
         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
       },
       "uniqueItems": true
+    },
+    "faction_id": {
+      "type": "string",
+      "description": "Optional canonical faction identifier. Omit for unaffiliated wild creatures.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
     },
     "ai_profile": {
       "type": "object",
