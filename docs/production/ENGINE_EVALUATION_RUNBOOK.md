@@ -13,6 +13,8 @@ This runbook makes the four engine-evaluation prototypes comparable and auditabl
 
 It does not select an engine. It defines how evidence must be produced before DEC-001 can be resolved.
 
+Use [ENGINE_EVALUATION_RESULT_TEMPLATE.md](ENGINE_EVALUATION_RESULT_TEMPLATE.md) for each executed candidate/prototype result.
+
 Every candidate run must preserve the same authoritative simulation intent and record enough metadata for another contributor to reproduce the result.
 
 ---

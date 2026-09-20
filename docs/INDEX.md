@@ -181,6 +181,7 @@ GUMFALL is currently in **preproduction**. No engine has been selected. All docu
 | [Risk Register](production/RISK_REGISTER.md) | DRAFT | 21 tracked risks with mitigations |
 | [Engine Evaluation ADR](production/ENGINE_EVALUATION_ADR.md) | OPEN | Engine criteria, candidates, methodology |
 | [Engine Evaluation Runbook](production/ENGINE_EVALUATION_RUNBOOK.md) | PROPOSED | Reproducible evidence protocol for the four engine prototypes |
+| [Engine Evaluation Result Template](production/ENGINE_EVALUATION_RESULT_TEMPLATE.md) | EVIDENCE TEMPLATE | Blank record for actual engine-prototype measurements and artifacts |
 
 ---
 
