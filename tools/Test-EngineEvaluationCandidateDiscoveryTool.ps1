@@ -46,12 +46,7 @@ try {
     New-EmptyFile -Path (Join-SyntheticPath -Base $TempRoot -Segments @('O3DE_25.05','bin','profile','Editor.exe'))
     New-EmptyFile -Path (Join-SyntheticPath -Base $TempRoot -Segments @('Unity Hub','Unity Hub.exe'))
 
-    Write-Host 'Synthetic install tree:'
-    Get-ChildItem -LiteralPath $TempRoot -Recurse -Force | ForEach-Object { Write-Host $_.FullName }
-
     $Raw = & $Tool -SearchRoots @($TempRoot)
-    Write-Host 'Discovery output:'
-    Write-Host $Raw
     $Result = $Raw | ConvertFrom-Json
 
     if ($Result.privacy.user_profile_scanned -ne $false) {
