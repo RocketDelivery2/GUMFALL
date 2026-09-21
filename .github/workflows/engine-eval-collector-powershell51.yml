@@ -4,11 +4,15 @@ on:
   push:
     paths:
       - "tools/Collect-EngineEvaluationEnvironment.ps1"
+      - "tools/Find-EngineEvaluationCandidates.ps1"
+      - "tools/Test-EngineEvaluationCandidateDiscoveryTool.ps1"
       - ".github/workflows/engine-eval-collector-powershell51.yml"
   pull_request:
     branches: [main]
     paths:
       - "tools/Collect-EngineEvaluationEnvironment.ps1"
+      - "tools/Find-EngineEvaluationCandidates.ps1"
+      - "tools/Test-EngineEvaluationCandidateDiscoveryTool.ps1"
       - ".github/workflows/engine-eval-collector-powershell51.yml"
 
 permissions:
@@ -52,4 +56,17 @@ jobs:
               throw "Collector did not report the PowerShell version."
           }
 
+          if ($null -eq $Result.candidate_installations) {
+              throw "Collector did not include system candidate discovery."
+          }
+
+          if ($Result.candidate_installations.privacy.user_profile_scanned -ne $false) {
+              throw "Candidate discovery unexpectedly scanned user-profile locations."
+          }
+
           Write-Host "Collector smoke test passed under Windows PowerShell $($PSVersionTable.PSVersion)."
+
+      - name: Self-test candidate discovery under Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          .\tools\Test-EngineEvaluationCandidateDiscoveryTool.ps1 -Root $PWD
