@@ -39,7 +39,7 @@ The helper `tools/Collect-EngineEvaluationEnvironment.ps1` may be used to captur
 
 Screenshots or videos may support human review but never replace authoritative numeric/log evidence for determinism, Body Integrity, or networking.
 
-Each machine-readable result manifest must validate against `schemas/engine_evaluation_result.schema.json`. The repository gate runs `tools/Test-EngineEvaluationEvidence.ps1`, which also rejects PASS/FAIL manifests that omit execution time, measurements, or evidence artifacts, and rejects selected identifying metadata keys.
+Each machine-readable result manifest must be named `result.json` or `*.result.json` and validate against `schemas/engine_evaluation_result.schema.json`. Other JSON files under `evidence/engine-evaluation/` are treated as raw evidence artifacts rather than result manifests. The repository gate runs `tools/Test-EngineEvaluationEvidence.ps1`, which parse-checks and privacy-scans every JSON artifact, then applies the result schema and PASS/FAIL evidence requirements only to result-manifest filenames.
 
 Recommended public evidence layout:
 

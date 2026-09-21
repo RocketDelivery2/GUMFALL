@@ -1,6 +1,6 @@
 # Test-EngineEvaluationEvidence.ps1
-# Validates machine-readable GUMFALL engine-evaluation evidence manifests.
-# This script validates evidence integrity only; it does not select or rank engines.
+# Validates machine-readable GUMFALL engine-evaluation evidence.
+# Result manifests use result.json or *.result.json; other JSON artifacts are privacy/parse checked only.
 
 [CmdletBinding()]
 param(
@@ -23,18 +23,24 @@ if ($PSVersionTable.PSVersion.Major -lt 7 -or
 }
 
 if (-not (Test-Path -LiteralPath $EvidenceRoot -PathType Container)) {
-    Write-Host '[PASSED] No engine evaluation result JSON files found.'
+    Write-Host '[PASSED] No engine evaluation JSON evidence found.'
     exit 0
 }
 
-$Files = @(
+$JsonFiles = @(
     Get-ChildItem -LiteralPath $EvidenceRoot -Recurse -File -Filter '*.json'
 )
 
-if ($Files.Count -eq 0) {
-    Write-Host '[PASSED] No engine evaluation result JSON files found.'
+if ($JsonFiles.Count -eq 0) {
+    Write-Host '[PASSED] No engine evaluation JSON evidence found.'
     exit 0
 }
+
+$ManifestFiles = @(
+    $JsonFiles | Where-Object {
+        $_.Name -ieq 'result.json' -or $_.Name -like '*.result.json'
+    }
+)
 
 $Findings = [System.Collections.Generic.List[string]]::new()
 
@@ -86,17 +92,34 @@ function Test-ForbiddenKeys {
     }
 }
 
-foreach ($File in $Files) {
+$ParsedByPath = @{}
+
+foreach ($File in $JsonFiles) {
     $Relative = $File.FullName.Substring($Root.Length).TrimStart('\', '/')
     $Raw = Get-Content -LiteralPath $File.FullName -Raw
 
-    $Manifest = $null
     try {
-        $Manifest = $Raw | ConvertFrom-Json -AsHashtable
+        $Parsed = $Raw | ConvertFrom-Json -AsHashtable
+        $ParsedByPath[$File.FullName] = [ordered]@{
+            relative = $Relative
+            raw = $Raw
+            value = $Parsed
+        }
+        Test-ForbiddenKeys -Node $Parsed -Path '$' -FileName $Relative
     } catch {
         Add-Finding "Invalid JSON: $Relative"
+    }
+}
+
+foreach ($File in $ManifestFiles) {
+    if (-not $ParsedByPath.ContainsKey($File.FullName)) {
         continue
     }
+
+    $ParsedRecord = $ParsedByPath[$File.FullName]
+    $Relative = [string]$ParsedRecord.relative
+    $Raw = [string]$ParsedRecord.raw
+    $Manifest = $ParsedRecord.value
 
     try {
         $Valid = Test-Json -Json $Raw -SchemaFile $SchemaPath -ErrorAction Stop
@@ -108,8 +131,6 @@ foreach ($File in $Files) {
         Add-Finding "Schema validation error in ${Relative}: $($_.Exception.Message)"
         continue
     }
-
-    Test-ForbiddenKeys -Node $Manifest -Path '$' -FileName $Relative
 
     $Result = [string]$Manifest.result
 
@@ -149,4 +170,4 @@ if ($Findings.Count -gt 0) {
     throw "Engine evaluation evidence validation found $($Findings.Count) issue(s)."
 }
 
-Write-Host "[PASSED] Engine evaluation evidence validation passed for $($Files.Count) manifest(s)."
+Write-Host "[PASSED] Engine evaluation evidence validation passed for $($ManifestFiles.Count) result manifest(s) and $($JsonFiles.Count) JSON artifact(s)."
