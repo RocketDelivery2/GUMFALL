@@ -122,6 +122,37 @@ $CandidateTools = [ordered]@{
     o3de = Get-CommandVersion -CommandName 'o3de'
 }
 
+$CandidateInstallations = [ordered]@{
+    status = 'unavailable'
+    privacy = [ordered]@{
+        default_scan_scope = 'system-install-locations-only'
+        user_profile_scanned = $false
+        executables_launched = $false
+    }
+    candidates = @()
+    launchers = @()
+}
+
+$DiscoveryScript = Join-Path $PSScriptRoot 'Find-EngineEvaluationCandidates.ps1'
+if (Test-Path -LiteralPath $DiscoveryScript -PathType Leaf) {
+    try {
+        $DiscoveryRaw = & $DiscoveryScript
+        $CandidateInstallations = $DiscoveryRaw | ConvertFrom-Json
+        $CandidateInstallations | Add-Member -NotePropertyName status -NotePropertyValue 'ok' -Force
+    } catch {
+        $CandidateInstallations = [ordered]@{
+            status = 'error'
+            privacy = [ordered]@{
+                default_scan_scope = 'system-install-locations-only'
+                user_profile_scanned = $false
+                executables_launched = $false
+            }
+            candidates = @()
+            launchers = @()
+        }
+    }
+}
+
 # Unity and Unreal do not reliably expose a stable command on PATH across installations.
 # Record only environment-provided executable hints; do not scan user folders or emit usernames.
 foreach ($Name in @('UNITY_EDITOR_PATH', 'UNITY_PATH')) {
@@ -163,6 +194,7 @@ $Result = [ordered]@{
     powershell = $Pwsh
     git = $Git
     candidate_tools = $CandidateTools
+    candidate_installations = $CandidateInstallations
 }
 
 $Json = $Result | ConvertTo-Json -Depth 8

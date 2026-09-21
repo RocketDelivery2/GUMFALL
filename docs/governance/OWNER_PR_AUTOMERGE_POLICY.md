@@ -11,6 +11,10 @@ The gate runs:
 - `tools/Test-EngineEvaluationEvidence.ps1 -Root $PWD`
 - `tools/Test-EngineEvaluationDeterminismTraceTool.ps1 -Root $PWD`
 - `tools/Test-EngineEvaluationBodyIntegrityTimingTool.ps1 -Root $PWD`
+- `tools/Test-EngineEvaluationPassContractTool.ps1 -Root $PWD`
+- `tools/Test-EngineEvaluationFrameTimingTool.ps1 -Root $PWD`
+- `tools/Test-EngineEvaluationReconciliationTool.ps1 -Root $PWD`
+- `tools/Test-EngineEvaluationCandidateDiscoveryTool.ps1 -Root $PWD`
 - `git diff --check`
 
 Automatic merge applies only when all of these are true:
