@@ -53,5 +53,9 @@ jobs:
         shell: pwsh
         run: ./tools/Test-EngineEvaluationCandidateDiscoveryTool.ps1 -Root $PWD
 
+      - name: Self-test engine evidence JSON classification
+        shell: pwsh
+        run: ./tools/Test-EngineEvaluationEvidenceClassification.ps1 -Root $PWD
+
       - name: Validate Git whitespace
         run: git diff --check
