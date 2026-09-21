@@ -3,11 +3,20 @@
 
 [CmdletBinding()]
 param(
-    [string]$Root = (Split-Path -Parent $PSScriptRoot)
+    [string]$Root
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+if ([string]::IsNullOrWhiteSpace($Root)) {
+    if ([string]::IsNullOrWhiteSpace($PSCommandPath)) {
+        throw 'Unable to derive repository root because PSCommandPath is unavailable.'
+    }
+
+    $ScriptDirectory = Split-Path -Parent $PSCommandPath
+    $Root = Split-Path -Parent $ScriptDirectory
+}
 
 $Tool = Join-Path $Root 'tools/Initialize-EngineEvaluationRun.ps1'
 if (-not (Test-Path -LiteralPath $Tool -PathType Leaf)) {
@@ -19,6 +28,19 @@ New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
 
 try {
     $SourceSha = '1111111111111111111111111111111111111111'
+
+    $DefaultOutputRoot = Join-Path $TempRoot 'default-root'
+    $DefaultText = (& $Tool -Candidate custom -Prototype prototype-1-determinism -OutputRoot $DefaultOutputRoot -SourceSha $SourceSha 2>&1 | Out-String)
+    $DefaultSummary = $DefaultText | ConvertFrom-Json
+
+    if ($DefaultSummary.status -ne 'NOT_PERFORMED') {
+        throw 'Initializer default-root invocation did not report NOT_PERFORMED.'
+    }
+
+    if (-not (Test-Path -LiteralPath $DefaultSummary.result_manifest -PathType Leaf)) {
+        throw 'Initializer default-root invocation did not create result.json.'
+    }
+
     $Output = & $Tool -Candidate custom -Prototype prototype-1-determinism -Root $Root -OutputRoot $TempRoot -SourceSha $SourceSha 2>&1
     $Code = $LASTEXITCODE
     $Text = ($Output | Out-String)
