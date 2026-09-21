@@ -108,7 +108,7 @@ foreach ($Root in $SearchRoots) {
 
     $EpicRoot = Join-Path $Root 'Epic Games'
     if (Test-Path -LiteralPath $EpicRoot -PathType Container) {
-        foreach ($EngineDir in @(Get-ChildItem -LiteralPath $EpicRoot -Directory -Filter 'UE_*' -ErrorAction SilentlyContinue)) {
+        foreach ($EngineDir in @(Get-ChildItem -LiteralPath $EpicRoot -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'UE_*' })) {
             $UnrealExe = Join-Path (Join-Path (Join-Path (Join-Path $EngineDir.FullName 'Engine') 'Binaries') 'Win64') 'UnrealEditor.exe'
             $Unreal4Exe = Join-Path (Join-Path (Join-Path (Join-Path $EngineDir.FullName 'Engine') 'Binaries') 'Win64') 'UE4Editor.exe'
             $Version = $EngineDir.Name -replace '^UE_', ''
@@ -131,7 +131,7 @@ foreach ($Root in $SearchRoots) {
         }
     }
 
-    foreach ($GodotDir in @(Get-ChildItem -LiteralPath $Root -Directory -Filter 'Godot*' -ErrorAction SilentlyContinue)) {
+    foreach ($GodotDir in @(Get-ChildItem -LiteralPath $Root -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'Godot*' })) {
         foreach ($GodotExe in @(Get-ChildItem -LiteralPath $GodotDir.FullName -File -Filter 'Godot*.exe' -ErrorAction SilentlyContinue)) {
             $Version = $null
             if ($GodotExe.Name -match '(?i)Godot[_-]?v?([0-9][A-Za-z0-9.\-]*)') {
@@ -141,7 +141,7 @@ foreach ($Root in $SearchRoots) {
         }
     }
 
-    foreach ($O3deDir in @(Get-ChildItem -LiteralPath $Root -Directory -Filter 'O3DE*' -ErrorAction SilentlyContinue)) {
+    foreach ($O3deDir in @(Get-ChildItem -LiteralPath $Root -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'O3DE*' })) {
         $O3deExe = Join-Path (Join-Path (Join-Path $O3deDir.FullName 'bin') 'profile') 'Editor.exe'
         if (Test-Path -LiteralPath $O3deExe -PathType Leaf) {
             $Version = $O3deDir.Name -replace '^(?i)O3DE[_-]?', ''
