@@ -17,7 +17,7 @@ param(
     )]
     [string]$Prototype,
 
-    [string]$Root = (Split-Path -Parent $PSScriptRoot),
+    [string]$Root,
 
     [string]$OutputRoot,
 
@@ -32,6 +32,15 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+if ([string]::IsNullOrWhiteSpace($Root)) {
+    if ([string]::IsNullOrWhiteSpace($PSCommandPath)) {
+        throw 'Unable to derive repository root because PSCommandPath is unavailable.'
+    }
+
+    $ScriptDirectory = Split-Path -Parent $PSCommandPath
+    $Root = Split-Path -Parent $ScriptDirectory
+}
 
 if ([string]::IsNullOrWhiteSpace($OutputRoot)) {
     $OutputRoot = Join-Path $Root 'evidence/engine-evaluation'
