@@ -83,7 +83,7 @@ function New-CandidateRecord {
 
     $ProductVersion = Get-FileProductVersion -Path $Path
 
-    return [ordered]@{
+    return [pscustomobject][ordered]@{
         candidate = $Candidate
         path = [System.IO.Path]::GetFullPath($Path)
         source = $Source
@@ -123,7 +123,7 @@ foreach ($Root in $SearchRoots) {
         $EpicLauncher = Join-Path (Join-Path (Join-Path (Join-Path $EpicRoot 'Launcher') 'Portal') 'Binaries') 'Win64'
         $EpicLauncher = Join-Path $EpicLauncher 'EpicGamesLauncher.exe'
         if (Test-Path -LiteralPath $EpicLauncher -PathType Leaf) {
-            $Launchers += [ordered]@{
+            $Launchers += [pscustomobject][ordered]@{
                 launcher = 'epic-games-launcher'
                 path = [System.IO.Path]::GetFullPath($EpicLauncher)
                 product_version = Get-FileProductVersion -Path $EpicLauncher
@@ -151,7 +151,7 @@ foreach ($Root in $SearchRoots) {
 
     $UnityHub = Join-Path (Join-Path $Root 'Unity Hub') 'Unity Hub.exe'
     if (Test-Path -LiteralPath $UnityHub -PathType Leaf) {
-        $Launchers += [ordered]@{
+        $Launchers += [pscustomobject][ordered]@{
             launcher = 'unity-hub'
             path = [System.IO.Path]::GetFullPath($UnityHub)
             product_version = Get-FileProductVersion -Path $UnityHub
