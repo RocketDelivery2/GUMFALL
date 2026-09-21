@@ -56,25 +56,6 @@ if ($null -eq $SearchRoots -or $SearchRoots.Count -eq 0) {
     $SearchRoots = Get-UniqueExistingRoots -Roots $SearchRoots
 }
 
-function Get-PathMatches {
-    param(
-        [Parameter(Mandatory)]
-        [string]$Root,
-        [Parameter(Mandatory)]
-        [string[]]$Segments
-    )
-
-    $Pattern = $Root
-    foreach ($Segment in $Segments) {
-        $Pattern = Join-Path -Path $Pattern -ChildPath $Segment
-    }
-
-    return @(
-        Get-ChildItem -Path $Pattern -File -ErrorAction SilentlyContinue |
-            Sort-Object FullName
-    )
-}
-
 function Get-FileProductVersion {
     param([string]$Path)
 
@@ -115,58 +96,65 @@ $Candidates = @()
 $Launchers = @()
 
 foreach ($Root in $SearchRoots) {
-    foreach ($File in (Get-PathMatches -Root $Root -Segments @('Unity','Hub','Editor','*','Editor','Unity.exe'))) {
-        $EditorDir = Split-Path -Parent $File.FullName
-        $VersionDir = Split-Path -Parent $EditorDir
-        $Version = Split-Path -Leaf $VersionDir
-        $Candidates += New-CandidateRecord -Candidate 'unity' -Path $File.FullName -Source 'system-install-location' -InferredVersion $Version
-    }
-
-    foreach ($File in (Get-PathMatches -Root $Root -Segments @('Epic Games','UE_*','Engine','Binaries','Win64','UnrealEditor.exe'))) {
-        $Version = $null
-        if ($File.FullName -match '[\\/]UE_([^\\/]+)[\\/]') {
-            $Version = $Matches[1]
+    $UnityEditorRoot = Join-Path (Join-Path (Join-Path $Root 'Unity') 'Hub') 'Editor'
+    if (Test-Path -LiteralPath $UnityEditorRoot -PathType Container) {
+        foreach ($VersionDir in @(Get-ChildItem -LiteralPath $UnityEditorRoot -Directory -ErrorAction SilentlyContinue)) {
+            $UnityExe = Join-Path (Join-Path $VersionDir.FullName 'Editor') 'Unity.exe'
+            if (Test-Path -LiteralPath $UnityExe -PathType Leaf) {
+                $Candidates += New-CandidateRecord -Candidate 'unity' -Path $UnityExe -Source 'system-install-location' -InferredVersion $VersionDir.Name
+            }
         }
-        $Candidates += New-CandidateRecord -Candidate 'unreal' -Path $File.FullName -Source 'system-install-location' -InferredVersion $Version
     }
 
-    foreach ($File in (Get-PathMatches -Root $Root -Segments @('Epic Games','UE_*','Engine','Binaries','Win64','UE4Editor.exe'))) {
-        $Version = $null
-        if ($File.FullName -match '[\\/]UE_([^\\/]+)[\\/]') {
-            $Version = $Matches[1]
+    $EpicRoot = Join-Path $Root 'Epic Games'
+    if (Test-Path -LiteralPath $EpicRoot -PathType Container) {
+        foreach ($EngineDir in @(Get-ChildItem -LiteralPath $EpicRoot -Directory -Filter 'UE_*' -ErrorAction SilentlyContinue)) {
+            $UnrealExe = Join-Path (Join-Path (Join-Path (Join-Path $EngineDir.FullName 'Engine') 'Binaries') 'Win64') 'UnrealEditor.exe'
+            $Unreal4Exe = Join-Path (Join-Path (Join-Path (Join-Path $EngineDir.FullName 'Engine') 'Binaries') 'Win64') 'UE4Editor.exe'
+            $Version = $EngineDir.Name -replace '^UE_', ''
+
+            if (Test-Path -LiteralPath $UnrealExe -PathType Leaf) {
+                $Candidates += New-CandidateRecord -Candidate 'unreal' -Path $UnrealExe -Source 'system-install-location' -InferredVersion $Version
+            } elseif (Test-Path -LiteralPath $Unreal4Exe -PathType Leaf) {
+                $Candidates += New-CandidateRecord -Candidate 'unreal' -Path $Unreal4Exe -Source 'system-install-location' -InferredVersion $Version
+            }
         }
-        $Candidates += New-CandidateRecord -Candidate 'unreal' -Path $File.FullName -Source 'system-install-location' -InferredVersion $Version
-    }
 
-    foreach ($File in (Get-PathMatches -Root $Root -Segments @('Godot*','Godot*.exe'))) {
-        $Version = $null
-        if ($File.Name -match '(?i)Godot[_-]?v?([0-9][A-Za-z0-9.\-]*)') {
-            $Version = $Matches[1]
+        $EpicLauncher = Join-Path (Join-Path (Join-Path (Join-Path $EpicRoot 'Launcher') 'Portal') 'Binaries') 'Win64'
+        $EpicLauncher = Join-Path $EpicLauncher 'EpicGamesLauncher.exe'
+        if (Test-Path -LiteralPath $EpicLauncher -PathType Leaf) {
+            $Launchers += [ordered]@{
+                launcher = 'epic-games-launcher'
+                path = [System.IO.Path]::GetFullPath($EpicLauncher)
+                product_version = Get-FileProductVersion -Path $EpicLauncher
+            }
         }
-        $Candidates += New-CandidateRecord -Candidate 'godot' -Path $File.FullName -Source 'system-install-location' -InferredVersion $Version
     }
 
-    foreach ($File in (Get-PathMatches -Root $Root -Segments @('O3DE*','bin','profile','Editor.exe'))) {
-        $Version = $null
-        if ($File.FullName -match '(?i)[\\/]O3DE[_-]?([^\\/]*)[\\/]') {
-            $Version = $Matches[1]
+    foreach ($GodotDir in @(Get-ChildItem -LiteralPath $Root -Directory -Filter 'Godot*' -ErrorAction SilentlyContinue)) {
+        foreach ($GodotExe in @(Get-ChildItem -LiteralPath $GodotDir.FullName -File -Filter 'Godot*.exe' -ErrorAction SilentlyContinue)) {
+            $Version = $null
+            if ($GodotExe.Name -match '(?i)Godot[_-]?v?([0-9][A-Za-z0-9.\-]*)') {
+                $Version = $Matches[1]
+            }
+            $Candidates += New-CandidateRecord -Candidate 'godot' -Path $GodotExe.FullName -Source 'system-install-location' -InferredVersion $Version
         }
-        $Candidates += New-CandidateRecord -Candidate 'o3de' -Path $File.FullName -Source 'system-install-location' -InferredVersion $Version
     }
 
-    foreach ($File in (Get-PathMatches -Root $Root -Segments @('Unity Hub','Unity Hub.exe'))) {
+    foreach ($O3deDir in @(Get-ChildItem -LiteralPath $Root -Directory -Filter 'O3DE*' -ErrorAction SilentlyContinue)) {
+        $O3deExe = Join-Path (Join-Path (Join-Path $O3deDir.FullName 'bin') 'profile') 'Editor.exe'
+        if (Test-Path -LiteralPath $O3deExe -PathType Leaf) {
+            $Version = $O3deDir.Name -replace '^(?i)O3DE[_-]?', ''
+            $Candidates += New-CandidateRecord -Candidate 'o3de' -Path $O3deExe -Source 'system-install-location' -InferredVersion $Version
+        }
+    }
+
+    $UnityHub = Join-Path (Join-Path $Root 'Unity Hub') 'Unity Hub.exe'
+    if (Test-Path -LiteralPath $UnityHub -PathType Leaf) {
         $Launchers += [ordered]@{
             launcher = 'unity-hub'
-            path = [System.IO.Path]::GetFullPath($File.FullName)
-            product_version = Get-FileProductVersion -Path $File.FullName
-        }
-    }
-
-    foreach ($File in (Get-PathMatches -Root $Root -Segments @('Epic Games','Launcher','Portal','Binaries','Win64','EpicGamesLauncher.exe'))) {
-        $Launchers += [ordered]@{
-            launcher = 'epic-games-launcher'
-            path = [System.IO.Path]::GetFullPath($File.FullName)
-            product_version = Get-FileProductVersion -Path $File.FullName
+            path = [System.IO.Path]::GetFullPath($UnityHub)
+            product_version = Get-FileProductVersion -Path $UnityHub
         }
     }
 }
