@@ -52,6 +52,15 @@ evidence/engine-evaluation/
   custom/
 ```
 
+Before an actual prototype run, initialize a pinned NOT_PERFORMED evidence package with:
+
+```powershell
+.\tools\Initialize-EngineEvaluationRun.ps1 -Candidate unity -Prototype prototype-1-determinism
+```
+
+The initializer captures the non-identifying environment artifact, pins the current Git source SHA, creates a schema-compatible `result.json`, and leaves the result as `NOT_PERFORMED` until real execution evidence exists.
+
+
 Do not commit credentials, proprietary SDK material, private anti-cheat logic, protected drop configurations, or private legal/IP records.
 
 ---
