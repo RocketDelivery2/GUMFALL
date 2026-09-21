@@ -6,6 +6,8 @@ on:
       - "tools/Collect-EngineEvaluationEnvironment.ps1"
       - "tools/Find-EngineEvaluationCandidates.ps1"
       - "tools/Test-EngineEvaluationCandidateDiscoveryTool.ps1"
+      - "tools/Initialize-EngineEvaluationRun.ps1"
+      - "tools/Test-EngineEvaluationRunInitializer.ps1"
       - ".github/workflows/engine-eval-collector-powershell51.yml"
   pull_request:
     branches: [main]
@@ -13,6 +15,8 @@ on:
       - "tools/Collect-EngineEvaluationEnvironment.ps1"
       - "tools/Find-EngineEvaluationCandidates.ps1"
       - "tools/Test-EngineEvaluationCandidateDiscoveryTool.ps1"
+      - "tools/Initialize-EngineEvaluationRun.ps1"
+      - "tools/Test-EngineEvaluationRunInitializer.ps1"
       - ".github/workflows/engine-eval-collector-powershell51.yml"
 
 permissions:
@@ -70,3 +74,8 @@ jobs:
         shell: powershell
         run: |
           .\tools\Test-EngineEvaluationCandidateDiscoveryTool.ps1 -Root $PWD
+
+      - name: Self-test run initializer under Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          .\tools\Test-EngineEvaluationRunInitializer.ps1 -Root $PWD
