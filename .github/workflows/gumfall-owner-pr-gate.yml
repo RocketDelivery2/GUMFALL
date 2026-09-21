@@ -66,6 +66,10 @@ jobs:
         shell: pwsh
         run: ./tools/Test-EngineEvaluationEvidenceClassification.ps1 -Root $PWD
 
+      - name: Self-test engine evaluation run initializer
+        shell: pwsh
+        run: ./tools/Test-EngineEvaluationRunInitializer.ps1 -Root $PWD
+
       - name: Validate whitespace
         shell: bash
         run: git diff --check
