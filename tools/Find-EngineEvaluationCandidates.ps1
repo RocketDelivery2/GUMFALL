@@ -108,16 +108,16 @@ foreach ($Root in $SearchRoots) {
 
     $EpicRoot = Join-Path $Root 'Epic Games'
     if (Test-Path -LiteralPath $EpicRoot -PathType Container) {
-        foreach ($EngineDir in @(Get-ChildItem -LiteralPath $EpicRoot -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'UE_*' })) {
-            $UnrealExe = Join-Path (Join-Path (Join-Path (Join-Path $EngineDir.FullName 'Engine') 'Binaries') 'Win64') 'UnrealEditor.exe'
-            $Unreal4Exe = Join-Path (Join-Path (Join-Path (Join-Path $EngineDir.FullName 'Engine') 'Binaries') 'Win64') 'UE4Editor.exe'
-            $Version = $EngineDir.Name -replace '^UE_', ''
-
-            if (Test-Path -LiteralPath $UnrealExe -PathType Leaf) {
-                $Candidates += New-CandidateRecord -Candidate 'unreal' -Path $UnrealExe -Source 'system-install-location' -InferredVersion $Version
-            } elseif (Test-Path -LiteralPath $Unreal4Exe -PathType Leaf) {
-                $Candidates += New-CandidateRecord -Candidate 'unreal' -Path $Unreal4Exe -Source 'system-install-location' -InferredVersion $Version
+        foreach ($UnrealFile in @(
+            Get-ChildItem -LiteralPath $EpicRoot -Recurse -File -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -in @('UnrealEditor.exe','UE4Editor.exe') }
+        )) {
+            $Version = $null
+            if ($UnrealFile.FullName -match '[\\/]UE_([^\\/]+)[\\/]') {
+                $Version = $Matches[1]
             }
+
+            $Candidates += New-CandidateRecord -Candidate 'unreal' -Path $UnrealFile.FullName -Source 'system-install-location' -InferredVersion $Version
         }
 
         $EpicLauncher = Join-Path (Join-Path (Join-Path (Join-Path $EpicRoot 'Launcher') 'Portal') 'Binaries') 'Win64'
