@@ -33,6 +33,8 @@ try {
     New-EmptyFile -Path (Join-Path $TempRoot 'Unity Hub/Unity Hub.exe')
 
     $Raw = & $Tool -SearchRoots @($TempRoot)
+    Write-Host "Candidate discovery self-test output:"
+    Write-Host $Raw
     $Result = $Raw | ConvertFrom-Json
 
     if ($Result.privacy.user_profile_scanned -ne $false) {
