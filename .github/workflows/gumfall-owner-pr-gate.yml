@@ -58,6 +58,10 @@ jobs:
         shell: pwsh
         run: ./tools/Test-EngineEvaluationReconciliationTool.ps1 -Root $PWD
 
+      - name: Self-test engine candidate discovery
+        shell: pwsh
+        run: ./tools/Test-EngineEvaluationCandidateDiscoveryTool.ps1 -Root $PWD
+
       - name: Validate whitespace
         shell: bash
         run: git diff --check
