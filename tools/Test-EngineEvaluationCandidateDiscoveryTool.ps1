@@ -17,6 +17,20 @@ if (-not (Test-Path -LiteralPath $Tool -PathType Leaf)) {
 $TempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("gumfall-engine-discovery-" + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
 
+function Join-SyntheticPath {
+    param(
+        [string]$Base,
+        [string[]]$Segments
+    )
+
+    $Path = $Base
+    foreach ($Segment in $Segments) {
+        $Path = Join-Path -Path $Path -ChildPath $Segment
+    }
+
+    return $Path
+}
+
 function New-EmptyFile {
     param([string]$Path)
 
@@ -26,15 +40,13 @@ function New-EmptyFile {
 }
 
 try {
-    New-EmptyFile -Path (Join-Path $TempRoot 'Unity/Hub/Editor/6000.3.1f1/Editor/Unity.exe')
-    New-EmptyFile -Path (Join-Path $TempRoot 'Epic Games/UE_5.6/Engine/Binaries/Win64/UnrealEditor.exe')
-    New-EmptyFile -Path (Join-Path $TempRoot 'Godot/Godot_v4.5-stable_win64.exe')
-    New-EmptyFile -Path (Join-Path $TempRoot 'O3DE_25.05/bin/profile/Editor.exe')
-    New-EmptyFile -Path (Join-Path $TempRoot 'Unity Hub/Unity Hub.exe')
+    New-EmptyFile -Path (Join-SyntheticPath -Base $TempRoot -Segments @('Unity','Hub','Editor','6000.3.1f1','Editor','Unity.exe'))
+    New-EmptyFile -Path (Join-SyntheticPath -Base $TempRoot -Segments @('Epic Games','UE_5.6','Engine','Binaries','Win64','UnrealEditor.exe'))
+    New-EmptyFile -Path (Join-SyntheticPath -Base $TempRoot -Segments @('Godot','Godot_v4.5-stable_win64.exe'))
+    New-EmptyFile -Path (Join-SyntheticPath -Base $TempRoot -Segments @('O3DE_25.05','bin','profile','Editor.exe'))
+    New-EmptyFile -Path (Join-SyntheticPath -Base $TempRoot -Segments @('Unity Hub','Unity Hub.exe'))
 
     $Raw = & $Tool -SearchRoots @($TempRoot)
-    Write-Host "Candidate discovery self-test output:"
-    Write-Host $Raw
     $Result = $Raw | ConvertFrom-Json
 
     if ($Result.privacy.user_profile_scanned -ne $false) {
